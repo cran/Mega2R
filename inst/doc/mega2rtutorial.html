@@ -707,19 +707,20 @@ variables in the .GlobalEnv.) Type:</p>
 </code></pre>
 
 <pre><code>##  [1] &quot;LocusCnt&quot;               &quot;MARKER_SCHEME&quot;         
-##  [3] &quot;PhenoCnt&quot;               &quot;affectclass_table&quot;     
-##  [5] &quot;allele_table&quot;           &quot;chr2int&quot;               
-##  [7] &quot;entrezGene&quot;             &quot;fam&quot;                   
-##  [9] &quot;int_table&quot;              &quot;locus_allele_table&quot;    
-## [11] &quot;locus_table&quot;            &quot;map_table&quot;             
-## [13] &quot;mapnames_table&quot;         &quot;marker_table&quot;          
-## [15] &quot;markers&quot;                &quot;markerscheme_table&quot;    
-## [17] &quot;pedigree_brkloop_table&quot; &quot;pedigree_table&quot;        
-## [19] &quot;person_brkloop_table&quot;   &quot;person_table&quot;          
-## [21] &quot;phenotype_table&quot;        &quot;positionVsName&quot;        
-## [23] &quot;refIndices&quot;             &quot;refRanges&quot;             
-## [25] &quot;traitaff_table&quot;         &quot;txdb&quot;                  
-## [27] &quot;unified_genotype_table&quot; &quot;verbose&quot;
+##  [3] &quot;Mega2R&quot;                 &quot;PhenoCnt&quot;              
+##  [5] &quot;affectclass_table&quot;      &quot;allele_table&quot;          
+##  [7] &quot;chr2int&quot;                &quot;entrezGene&quot;            
+##  [9] &quot;fam&quot;                    &quot;int_table&quot;             
+## [11] &quot;locus_allele_table&quot;     &quot;locus_table&quot;           
+## [13] &quot;map_table&quot;              &quot;mapnames_table&quot;        
+## [15] &quot;marker_table&quot;           &quot;markers&quot;               
+## [17] &quot;markerscheme_table&quot;     &quot;pedigree_brkloop_table&quot;
+## [19] &quot;pedigree_table&quot;         &quot;person_brkloop_table&quot;  
+## [21] &quot;person_table&quot;           &quot;phenotype_table&quot;       
+## [23] &quot;positionVsName&quot;         &quot;refIndices&quot;            
+## [25] &quot;refRanges&quot;              &quot;traitaff_table&quot;        
+## [27] &quot;txdb&quot;                   &quot;unified_genotype_table&quot;
+## [29] &quot;verbose&quot;
 </code></pre>
 
 <p>A more informative overview of the database can be had with:</p>
@@ -1719,7 +1720,7 @@ when necessary.</p>
 </code></pre>
 
 <pre><code>##   chr   gene nvariants   start     end      skat
-## 1   1 CEP104         8 3728644 3773797 0.4778538
+## 1   1 CEP104         8 3728644 3773797 0.4870178
 </code></pre>
 
 <pre><code class="r"># we will skip this line for the Vignette document production because it takes
@@ -1753,10 +1754,10 @@ Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, &quot;D&quot;, kernel = &quot;linear.weighted&qu
 </code></pre>
 
 <pre><code>##   chr   gene nvariants     start       end        skat
-## 1   1    AK5         4  77747662  78025654 0.061898764
-## 2   1   ST7L         2 113066141 113153625 0.028862617
-## 3   1 KIF26B         8 245318287 245809683 0.008400698
-## 4   1  DISP1         4 222988431 223179337 0.001861194
+## 1   1    AK5         4  77747662  78025654 0.061922313
+## 2   1   ST7L         2 113066141 113153625 0.027614095
+## 3   1 KIF26B         8 245318287 245809683 0.006863812
+## 4   1  DISP1         4 222988431 223179337 0.001892741
 </code></pre>
 
 <p>Note: we set verbose to FALSE otherwise there will be a large number of print outs indicating no markers are in the range.  (Recall the samples come
@@ -1784,56 +1785,56 @@ Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, &quot;D&quot;, kernel = &quot;linear.weighted&qu
 <pre><code class="r">print(ENV$SKAT_results)
 </code></pre>
 
-<pre><code>##    chr      gene nvariants     start       end        skat
-## 1    1   DDX11L1         8     11874     14409 0.084805663
-## 2    1    NBPF20         4 144151519 144830407 0.163746164
-## 3    1 GNG12-AS1         4  68297971  68668670 1.000000000
-## 4    1  MIR548F1         4 186029867 186446655 0.735282663
-## 5    1     TESK2         4  45809555  45956840 0.462521979
-## 6    1   SDCCAG8         8 243419307 243663393 0.745903279
-## 7    1     WDR63         8  85527993  85598821 0.989385340
-## 8    1       CR1        12 207669473 207743990 0.762749038
-## 9    1     GLIS1         4  53971906  54199877 0.482525440
-## 10   1      DAB1         4  57463579  59012446 0.446145241
-## 11   1       DPT         4 168664695 168698442 0.158150865
-## 12   1       AK4         4  65613850  65697828 0.241678641
-## 13   1      EPRS         8 220141942 220220000 0.984573611
-## 14   1     NTNG1         4 107682629 108024475 0.272727992
-## 15   1      ATF6        20 161736034 161835745 0.965993161
-## 16   1    SRGAP2         8 206557369 206628046 0.092093821
-## 17   1       AK5         4  77748287  78025654 0.061838308
-## 18   1    BRINP3         4 190066797 190446759 0.871569043
-## 19   1 LINC01140         4  87458690  87634886 1.000000000
-## 20   1     KCNT2         4 196194913 196577499 0.505471532
-## 21   1   TRABD2B         8  48226200  48462562 0.199393417
-## 22   1   C1orf53         8 197871682 197876497 1.000000000
-## 23   1      NCF2         4 183524697 183559739 0.382699047
-## 24   1      NPR1         4 153652630 153666468 0.942495257
-## 25   1   PLEKHO1         4 150122170 150131825 0.653585833
-## 26   1     PI4KB         8 151264273 151300191 0.403286139
-## 27   1     GDAP2         4 118419844 118472302 0.294834453
-## 28   1      ST7L         2 113084413 113160839 0.026118450
-## 29   1     MARC2        16 220921676 220957596 0.349610378
-## 30   1    KIF26B         8 245318287 245866428 0.009708821
-## 31   1      HHAT         4 210502250 210849638 0.268283234
-## 32   1   GATAD2B         8 153777203 153895451 0.872992330
-## 33   1     LRRC7         4  70032868  70340687 0.892892655
-## 34   1     LRRC7         4  70225874  70589171 0.521901581
-## 35   1      RGS7         4 240938817 241520478 0.503756046
-## 36   1      RYR2         8 237205702 237997288 0.491985578
-## 37   1    SLC2A5         4   9097005   9129887 1.000000000
-## 38   1    WASH7P        12     14362     16765 0.707898126
-## 39   1    WASH7P         8     15603     29370 1.000000000
-## 40   1      EVI5         4  92974253  93257961 0.322081450
-## 41   1     TTC13         4 231041987 231114618 0.738553501
-## 42   1   C1orf21         4 184356150 184598155 0.267348889
-## 43   1    IGSF21         4  18434240  18704977 0.548719897
-## 44   1     DISP1         4 222988431 223179337 0.001232824
-## 45   1       CD2         4 117297086 117311851 0.105091725
-## 46   1  C1orf158         8  12806163  12821102 0.501879459
-## 47   1    NOS1AP         4 162039581 162326974 0.309713218
-## 48   1    CEP104         8   3728653   3773797 0.493189778
-## 49   1    CDK11B         4   1571100   1647917 0.791074566
+<pre><code>##    chr      gene nvariants     start       end         skat
+## 1    1   DDX11L1         8     11874     14409 0.0848706596
+## 2    1    NBPF20         4 144151519 144830407 0.1568647179
+## 3    1 GNG12-AS1         4  68297971  68668670 1.0000000000
+## 4    1  MIR548F1         4 186029867 186446655 0.7438388831
+## 5    1     TESK2         4  45809555  45956840 0.4749181180
+## 6    1   SDCCAG8         8 243419307 243663393 0.7505457597
+## 7    1     WDR63         8  85527993  85598821 0.9702720591
+## 8    1       CR1        12 207669473 207743990 1.0000000000
+## 9    1     GLIS1         4  53971906  54199877 0.4854100754
+## 10   1      DAB1         4  57463579  59012446 0.4589188601
+## 11   1       DPT         4 168664695 168698442 0.1606558659
+## 12   1       AK4         4  65613850  65697828 0.2408631430
+## 13   1      EPRS         8 220141942 220220000 1.0000000000
+## 14   1     NTNG1         4 107682629 108024475 0.2774302847
+## 15   1      ATF6        20 161736034 161835745 0.9233424958
+## 16   1    SRGAP2         8 206557369 206628046 0.0914191519
+## 17   1       AK5         4  77748287  78025654 0.0620431534
+## 18   1    BRINP3         4 190066797 190446759 0.8296514453
+## 19   1 LINC01140         4  87458690  87634886 1.0000000000
+## 20   1     KCNT2         4 196194913 196577499 0.4932358203
+## 21   1   TRABD2B         8  48226200  48462562 0.1955619582
+## 22   1   C1orf53         8 197871682 197876497 1.0000000000
+## 23   1      NCF2         4 183524697 183559739 0.3937498724
+## 24   1      NPR1         4 153652630 153666468 0.9386499124
+## 25   1   PLEKHO1         4 150122170 150131825 0.6498569912
+## 26   1     PI4KB         8 151264273 151300191 0.4005708789
+## 27   1     GDAP2         4 118419844 118472302 0.2983078671
+## 28   1      ST7L         2 113084413 113160839 0.0252883598
+## 29   1     MARC2        16 220921676 220957596 0.3585786358
+## 30   1    KIF26B         8 245318287 245866428 0.0090829538
+## 31   1      HHAT         4 210502250 210849638 0.2527692942
+## 32   1   GATAD2B         8 153777203 153895451 0.8725338535
+## 33   1     LRRC7         4  70032868  70340687 1.0000000000
+## 34   1     LRRC7         4  70225874  70589171 0.5370060995
+## 35   1      RGS7         4 240938817 241520478 0.5264654537
+## 36   1      RYR2         8 237205702 237997288 0.4983249365
+## 37   1    SLC2A5         4   9097005   9129887 1.0000000000
+## 38   1    WASH7P        12     14362     16765 0.7071786846
+## 39   1    WASH7P         8     15603     29370 1.0000000000
+## 40   1      EVI5         4  92974253  93257961 0.3267216561
+## 41   1     TTC13         4 231041987 231114618 0.7258877876
+## 42   1   C1orf21         4 184356150 184598155 0.2674100027
+## 43   1    IGSF21         4  18434240  18704977 0.5500376065
+## 44   1     DISP1         4 222988431 223179337 0.0009228141
+## 45   1       CD2         4 117297086 117311851 0.1034987334
+## 46   1  C1orf158         8  12806163  12821102 0.5049194971
+## 47   1    NOS1AP         4 162039581 162326974 0.3150683274
+## 48   1    CEP104         8   3728653   3773797 0.4920454923
+## 49   1    CDK11B         4   1571100   1647917 0.7932239816
 </code></pre>
 
 <h1>8 Outputting Mega2R data to VCF format</h1>
@@ -1948,11 +1949,11 @@ ENV = read.Mega2DB(db)
 seqsimgwaa = Mega2GenABEL()
 </code></pre>
 
-<pre><code>## Reading individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tfam&#39; ...
-## ... done.  Read 1380 individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tfam&#39;
-## Reading genotypes from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tped&#39; ...
-## ...done.  Read 1000 SNPs from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tped&#39;
-## Writing to file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABELtped.raw&#39; ...
+<pre><code>## Reading individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tfam&#39; ...
+## ... done.  Read 1380 individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tfam&#39;
+## Reading genotypes from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tped&#39; ...
+## ...done.  Read 1000 SNPs from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tped&#39;
+## Writing to file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABELtped.raw&#39; ...
 ## ... done.
 ## ids loaded...
 ## marker names loaded...
@@ -2453,11 +2454,11 @@ ENV = read.Mega2DB(sdb)
 mega = Mega2GenABEL()
 </code></pre>
 
-<pre><code>## Reading individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tfam&#39; ...
-## ... done.  Read 2500 individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tfam&#39;
-## Reading genotypes from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tped&#39; ...
-## ...done.  Read 833 SNPs from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABEL.tped&#39;
-## Writing to file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpS92WZA/Mega2GenABELtped.raw&#39; ...
+<pre><code>## Reading individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tfam&#39; ...
+## ... done.  Read 2500 individual ids from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tfam&#39;
+## Reading genotypes from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tped&#39; ...
+## ...done.  Read 833 SNPs from file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABEL.tped&#39;
+## Writing to file &#39;/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpmeEeXX/Mega2GenABELtped.raw&#39; ...
 ## ... done.
 ## ids loaded...
 ## marker names loaded...

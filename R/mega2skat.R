@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -80,8 +80,10 @@ init_SKAT = function (db = NULL, verbose = FALSE, allMarkers = FALSE) {
                                      stringsAsFactors = FALSE)
 
 #   envir$mt = matrix(c(11, 12, 21, 22, 0,    0, 1, 1, 2, 9), nrow = 5, ncol = 2)
-    envir$mt = matrix(c(0x10001, 0x10002, 0x20001, 0x20002, 0,    0, 1, 1, 2, 0),
-                      nrow = 5, ncol = 2)
+#   envir$mt = matrix(c(0x10001, 0x10002, 0x20001, 0x20002, 0,    0, 1, 1, 2, 0),
+#                     nrow = 5, ncol = 2)
+    envir$mt1 = c(0x10001, 0x10002, 0x20001, 0x20002, 0)
+    envir$mt2 = c(      0,       1,       1,       2, 0)
 
     envir$allMarkers = allMarkers
 
@@ -143,9 +145,11 @@ init_SKAT = function (db = NULL, verbose = FALSE, allMarkers = FALSE) {
 #' Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", 
 #'           weights.beta = c(0.5, 0.5), gs=50:60 )
 #'
-#' # try this below if there is time
-#' # Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", 
-#' #           weights.beta = c(0.5, 0.5), genes=c("CEP104") )
+#' \donttest{
+#' # donttestcheck: try this below if there is time
+#'  Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", 
+#'            weights.beta = c(0.5, 0.5), genes=c("CEP104") )
+#' }
 #'
 #' ENV$SKAT_results
 #'
@@ -210,18 +214,19 @@ Mega2SKAT = function (f, ty, gs = 1:100, genes=NULL, skat = SKAT::SKAT, envir = 
 #'
 #' @examples
 #' db = system.file("exdata", "seqsimm.db", package="Mega2R")
-#' ENV = init_SKAT(db, verbose = FALSE, allMarkers = FALSE)
+#' ENV = init_SKAT(db, verbose = TRUE, allMarkers = FALSE)
 #' Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", gs=1:1)
 #'
-#' # try this below instead if there is time
-## Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", 
-##           weights.beta = c(0.5, 0.5), genes=c("CEP104") )
+#' \donttest{
+#' # donttestcheck: try this below instead if there is time
+#' Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", 
+#'           weights.beta = c(0.5, 0.5), genes=c("CEP104") )
+#' }
 #'
 #' # DOSKAT is called internally to Mega2SKAT. init_SKAT and Mega2SKAT need to be
 #' # called to set up the environment for DOSKAT to run.  You should ignore DOSKAT
 #' # and use Mega2SKAT instead
 #' #
-#' ENV$verbose = TRUE
 #' applyFnToRanges(DOSKAT, ENV$refRanges[50:60, ], ENV$refIndices)
 #'
 # SKAT(<formula>, <out_type>, kernel = "linear.weighted", weights.beta=c(0.5,0.5))
@@ -242,7 +247,7 @@ DOSKAT = function(markers_arg, range_arg, envir, ...) {
     geno = matrix(0, nrow = (di[1]), ncol = di[2])
     kk = 0
     for (k in 1:(di[2])) {
-        vec = envir$mt[match(as.integer(geno_arg[ , k]), envir$mt), 2]
+        vec = envir$mt2[match(as.integer(geno_arg[ , k]), envir$mt1)]
         g0 = sum(vec == 0)
         g1 = sum(vec == 1)
         g2 = sum(vec == 2)

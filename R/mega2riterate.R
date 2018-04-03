@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -303,7 +303,10 @@ read.Mega2DB = function(db, ...) {
 #'   }
 #'
 #'    # apply function "show" to all transcripts on genes ELL2 and CARD15
-#'    # applyFnToGenes(show, genes_arg = c("CEP104"))
+#' \donttest{
+#'     # donttestcheck: time
+#'     applyFnToGenes(show, genes_arg = c("CEP104"))
+#' }
 #'
 #'    # apply function "show" to all genotypes on chromosomes 11 for two base
 #'    # pair ranges

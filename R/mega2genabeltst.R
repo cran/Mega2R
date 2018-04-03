@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -118,9 +118,11 @@ dmpPed = function(gwaa_ = srdta, pfx, default = "bt") {
 #' y = Mega2ENVGenABEL()
 #' Mega2GenABELtst(y, y, full = FALSE)
 #'
-#' # if you have more time, try ...
-#' # x = Mega2GenABEL()
-#' # Mega2GenABELtst(x, y, full = FALSE)
+#' \donttest{
+#' # donttestcheck: if you have more time, try ...
+#' x = Mega2GenABEL()
+#' Mega2GenABELtst(x, y, full = FALSE)
+#' }
 #'
 Mega2GenABELtst = function (mega_ = mega, gwaa_ = srdta, full = TRUE, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
