@@ -1,6 +1,6 @@
 Package: Mega2R
-Version: 1.0.2
-Date: 2018-04-03
+Version: 1.0.3
+Date: 2018-04-30
 Title: Accessing and Processing a 'Mega2' Genetic Database
 Description: Uses as input genetic data that have been reformatted
      and stored in a 'SQLite' database; this database is initially
@@ -23,20 +23,21 @@ Authors@R: c(person(c("Robert","V."), "Baron", email = "rvb5@pitt.edu",  role = 
              person("","University of Pittsburgh",role=c("cph")))
 URL: https://watson.hgen.pitt.edu/mega2/mega2r/
 BugReports: https://groups.google.com/forum/#!forum/mega2-users
-Depends: R (>= 3.3), GenABEL, SKAT, pedgene,
+Depends: R (>= 3.3), SKAT, pedgene, gdsfmt
 License: GPL-2
 LinkingTo: Rcpp
 Imports: AnnotationDbi, DBI, GenomeInfoDb, RSQLite, methods
 Suggests: knitr, rmarkdown, formatR, TxDb.Hsapiens.UCSC.hg19.knownGene,
         org.Hs.eg.db
+Enhances: GenABEL
 NeedsCompilation: yes
 RoxygenNote: 6.0.1
 LazyData: true
 VignetteBuilder: knitr
-Packaged: 2018-04-03 17:13:47 UTC; dweeks
+Packaged: 2018-05-22 17:37:01 UTC; dweeks
 Author: Robert V. Baron [aut],
   Daniel E. Weeks [aut, cre],
   University of Pittsburgh [cph]
 Maintainer: Daniel E. Weeks <weeks@pitt.edu>
 Repository: CRAN
-Date/Publication: 2018-04-03 17:51:39 UTC
+Date/Publication: 2018-05-22 20:45:31 UTC

@@ -248,6 +248,7 @@ vcfdir = file.path(where_mega2rtutorial_data(), "vcfr")
 list.files(vcfdir)
 
 ## ----seqsimgwaa----------------------------------------------------------
+require("GenABEL")
 # Before issuing the next command, make sure you have issued
 # this command `dump_mega2rtutorial_data()` first
 # as instructed in the "Tutorial Data' section above.
@@ -262,18 +263,21 @@ seqsimgwaa = Mega2GenABEL()
 str(seqsimgwaa)
 
 ## ----srdta---------------------------------------------------------------
-library(GenABEL)
-data(srdta)
+GotGenABEL = require("GenABEL", quietly=FALSE)
+if (GotGenABEL) data(srdta)
 
 ## ----dmpPed,results="hide",warning=FALSE---------------------------------
+GotGenABEL = require("GenABEL", quietly=FALSE)
+
 # Before issuing the next command, make sure you have issued
 # this command `dump_mega2rtutorial_data()` first
 # as instructed in the "Tutorial Data' section above.
 srdtafile = file.path(where_mega2rtutorial_data(), "srdta")
-export.plink(srdta, transpose = FALSE, filebasename = srdtafile,
+if (GotGenABEL) export.plink(srdta, transpose = FALSE, filebasename = srdtafile,
              phenotypes = names(srdta@phdata)[-(1:2)])
 
 ## ---- srdta.db,eval=TRUE-------------------------------------------------
+GotGenABEL = require("GenABEL", quietly=FALSE)
 # Before issuing the next command, make sure you have issued
 # this command `dump_mega2rtutorial_data()` first
 # as instructed in the "Tutorial Data' section above.
@@ -283,10 +287,12 @@ ENV = read.Mega2DB(sdb)
 mega = Mega2GenABEL()
 
 ## ----strs----------------------------------------------------------------
+GotGenABEL = require("GenABEL", quietly=FALSE)
 str(mega)
-str(srdta)
+if (GotGenABEL) str(srdta)
 
 ## ----mega2genabeltst-----------------------------------------------------
+GotGenABEL = require("GenABEL", quietly=FALSE)
 options(max.print = 30)
 Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
 
