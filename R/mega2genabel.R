@@ -49,6 +49,7 @@
 #' @export
 #'
 #' @examples
+#'\dontrun{
 #' require("GenABEL")
 #' db = system.file("exdata", "seqsimm.db", package="Mega2R")
 #' ENV = read.Mega2DB(db)
@@ -56,6 +57,7 @@
 #'
 #' str(seqsimgwaa)
 #' head(summary(seqsimgwaa))
+#'}
 #'
 Mega2GenABEL = function (markers = NULL, mapno = 0, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
@@ -143,6 +145,7 @@ Mega2GenABELClean = function () {
 #' @export
 #'
 #' @examples
+#'\dontrun{
 #' require("GenABEL")
 #' db = system.file("exdata", "seqsimm.db", package="Mega2R")
 #' ENV = read.Mega2DB(db)
@@ -150,6 +153,7 @@ Mega2GenABELClean = function () {
 #'
 #' str(gwaa)
 #' head(summary(gwaa))
+#'}
 #'
 Mega2ENVGenABEL = function (markers = NULL, force = TRUE, makemap = FALSE,
                          sort = TRUE, envir = ENV) {
@@ -392,20 +396,24 @@ mkGenABELcoding = function(markers = NULL, envir) {
 ##            paste0(mm$AlleleName.y, mm$AlleleName.x))
 ##  envir$xGTy = Freq.x > (1-Freq.x)
 
-    if (any(mm$Frequency.x == .5)) {
-        if (envir$MARKER_SCHEME == 1) {
-            ms = envir$markerscheme_table[envir$markerscheme_table$key %in% markers$locus_link,]
-            w = which(mm$Frequency.x == .5)
+    if (any(mm$Frequency.x == .5) && FALSE) {
+        w = which(mm$Frequency.x == .5)
+        xx = getgenotypesraw(markers[w,], envir)
+        yy = xx[1,] == 65537
+        nn[w] = ifelse(yy, paste0(mm$AlleleName.x, mm$AlleleName.y)[w], paste0(mm$AlleleName.y, mm$AlleleName.x)[w])
+##      if (envir$MARKER_SCHEME == 1) {
+##          ms = envir$markerscheme_table[envir$markerscheme_table$key %in% markers$locus_link,]
 ##          print(mm[w,])
 ##          print(ms[w,])
 ##          print(envir$markers[w,])
-            ms1 = ms$allele1[w]
-            nn[w] = ifelse(ms1 == 1, paste0(mm$AlleleName.y[w], mm$AlleleName.x[w]),
-                                     paste0(mm$AlleleName.x[w], mm$AlleleName.y[w]))
-        } else if (envir$MARKER_SCHEME == 2) {
-            w = which(mm$Frequency.x == .5)
+##          ms1 = ms$allele1[w]
+##          nn[w] = ifelse(ms1 == 1, paste0(mm$AlleleName.y[w], mm$AlleleName.x[w]),
+##                                   paste0(mm$AlleleName.x[w], mm$AlleleName.y[w]))
+##      } else if (envir$MARKER_SCHEME == 2) {
 ##          print(mm[w,])
-        }
+##      }
+        print(mm[w,])
+        print(nn[w])
     }
 
     nn[mm$Frequency.x == 0 & mm$Frequency.y == 0] = '12'

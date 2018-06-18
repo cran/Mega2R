@@ -606,8 +606,11 @@ db = file.path(where_mega2rtutorial_data(), &quot;seqsimr.db&quot;)
 ENV = read.Mega2DB(db, verbose = TRUE)
 </code></pre>
 
-<pre><code>## int_table    34  3   
+<pre><code>## int_table    35  3   
 ## int_table    pId key value   
+## 
+## charstar_table   5   3   
+## charstar_table   pId key value   
 ## 
 ## pedigree_table   20  8   
 ## pedigree_table   pId Num EntryCnt    Name    PedPre  OriginalID  origped pedigree_link   
@@ -629,9 +632,6 @@ ENV = read.Mega2DB(db, verbose = TRUE)
 ## 
 ## marker_table 1000    7   
 ## marker_table pId MarkerName  pos_avg pos_female  pos_male    chromosome  locus_link  
-## 
-## markerscheme_table   1000    4   
-## markerscheme_table   pId key allele1 allele2 
 ## 
 ## map_table    2000    6   
 ## map_table    pId marker  map position    pos_female  pos_male    
@@ -706,21 +706,22 @@ variables in the .GlobalEnv.) Type:</p>
 <pre><code class="r">ls(ENV)
 </code></pre>
 
-<pre><code>##  [1] &quot;DBcompress&quot;             &quot;LocusCnt&quot;              
-##  [3] &quot;MARKER_SCHEME&quot;          &quot;Mega2R&quot;                
-##  [5] &quot;PhenoCnt&quot;               &quot;affectclass_table&quot;     
-##  [7] &quot;allele_table&quot;           &quot;chr2int&quot;               
-##  [9] &quot;entrezGene&quot;             &quot;fam&quot;                   
-## [11] &quot;int_table&quot;              &quot;locus_allele_table&quot;    
-## [13] &quot;locus_table&quot;            &quot;map_table&quot;             
-## [15] &quot;mapnames_table&quot;         &quot;marker_table&quot;          
-## [17] &quot;markers&quot;                &quot;markerscheme_table&quot;    
-## [19] &quot;pedigree_brkloop_table&quot; &quot;pedigree_table&quot;        
-## [21] &quot;person_brkloop_table&quot;   &quot;person_table&quot;          
-## [23] &quot;phenotype_table&quot;        &quot;positionVsName&quot;        
-## [25] &quot;refIndices&quot;             &quot;refRanges&quot;             
-## [27] &quot;traitaff_table&quot;         &quot;txdb&quot;                  
-## [29] &quot;unified_genotype_table&quot; &quot;verbose&quot;
+<pre><code>##  [1] &quot;DBMega2Version&quot;         &quot;DBcompress&quot;            
+##  [3] &quot;LocusCnt&quot;               &quot;MARKER_SCHEME&quot;         
+##  [5] &quot;Mega2R&quot;                 &quot;PhenoCnt&quot;              
+##  [7] &quot;affectclass_table&quot;      &quot;allele_table&quot;          
+##  [9] &quot;charstar_table&quot;         &quot;chr2int&quot;               
+## [11] &quot;entrezGene&quot;             &quot;fam&quot;                   
+## [13] &quot;int_table&quot;              &quot;locus_allele_table&quot;    
+## [15] &quot;locus_table&quot;            &quot;map_table&quot;             
+## [17] &quot;mapnames_table&quot;         &quot;marker_table&quot;          
+## [19] &quot;markers&quot;                &quot;pedigree_brkloop_table&quot;
+## [21] &quot;pedigree_table&quot;         &quot;person_brkloop_table&quot;  
+## [23] &quot;person_table&quot;           &quot;phenotype_table&quot;       
+## [25] &quot;positionVsName&quot;         &quot;refIndices&quot;            
+## [27] &quot;refRanges&quot;              &quot;traitaff_table&quot;        
+## [29] &quot;txdb&quot;                   &quot;unified_genotype_table&quot;
+## [31] &quot;verbose&quot;
 </code></pre>
 
 <p>A more informative overview of the database can be had with:</p>
@@ -745,12 +746,12 @@ variables in the .GlobalEnv.) Type:</p>
 ##                        rows cols
 ## affectclass_table         1    9
 ## allele_table           2002    5
-## int_table                34    3
+## charstar_table            5    3
+## int_table                35    3
 ## locus_table            1001    5
 ## map_table              2000    6
 ## mapnames_table            2    6
 ## marker_table           1000    8
-## markerscheme_table     1000    4
 ## pedigree_brkloop_table   20    8
 ## pedigree_table           20    8
 ## person_brkloop_table   1380   11
@@ -943,12 +944,12 @@ applyFnToRanges(show)
 ## 64         64              64   snp23364          1  2244530
 ## [1] &quot;g6g6g6g6g6&quot;
 ##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
-## [1,] &quot;21&quot; &quot;12&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;22&quot; &quot;11&quot; &quot;11&quot;
-## [2,] &quot;21&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot; &quot;11&quot;
+## [1,] &quot;12&quot; &quot;12&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;22&quot; &quot;11&quot; &quot;11&quot;
+## [2,] &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot;
 ## [3,] &quot;11&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot;
-## [4,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot;
+## [4,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot;
 ## [5,] &quot;11&quot; &quot;22&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot;
-## [6,] &quot;11&quot; &quot;22&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot; &quot;11&quot;
+## [6,] &quot;11&quot; &quot;22&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot;
 ## [1] &quot;rrrrrrrrrr&quot;
 ##   chr   start     end name
 ## 5   1 3762000 3763000    E
@@ -1184,12 +1185,12 @@ applyFnToGenes(show, ranges_arg = matrix(c(1, 5e+06, 1e+07, 1, 1e+07, 1.5e+07), 
 ## 88         88              88   snp34536          1 12813440
 ## [1] &quot;g6g6g6g6g6&quot;
 ##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
-## [1,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;22&quot; &quot;22&quot; &quot;22&quot; &quot;11&quot;
-## [2,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot;
+## [1,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;22&quot; &quot;22&quot; &quot;22&quot; &quot;11&quot;
+## [2,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot;
 ## [3,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;22&quot; &quot;22&quot; &quot;11&quot;
-## [4,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot;
+## [4,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot;
 ## [5,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;22&quot; &quot;22&quot; &quot;11&quot;
-## [6,] &quot;11&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;21&quot; &quot;21&quot; &quot;11&quot;
+## [6,] &quot;11&quot; &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; &quot;12&quot; &quot;11&quot;
 </code></pre>
 
 <pre><code class="r"># apply function &#39;show&#39; to all genotypes for first marker in each chromosome (We
@@ -1258,12 +1259,12 @@ dim(genotype)
 </code></pre>
 
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-## [1,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;12&quot; 
+## [1,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot; 
 ## [2,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;11&quot; 
 ## [3,] &quot;12&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;11&quot; 
 ## [4,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;11&quot; 
 ## [5,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;22&quot; &quot;11&quot; 
-## [6,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;21&quot; &quot;12&quot;
+## [6,] &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;11&quot; &quot;12&quot; &quot;12&quot;
 </code></pre>
 
 <h3>5.4.2 Raw Genotypes</h3>
@@ -1292,12 +1293,12 @@ dim(raw)
 </code></pre>
 
 <pre><code>##       [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]   [,9] [,10]
-## [1,] 65537 65537 65537 65537 65537 65537 65537 65537 131073 65538
+## [1,] 65537 65537 65537 65537 65537 65537 65537 65537  65538 65538
 ## [2,] 65537 65537 65537 65537 65537 65537 65537 65537 131074 65537
 ## [3,] 65538 65537 65537 65537 65537 65537 65537 65537 131074 65537
 ## [4,] 65537 65537 65537 65537 65537 65537 65537 65537 131074 65537
 ## [5,] 65537 65537 65537 65537 65537 65537 65537 65537 131074 65537
-## [6,] 65537 65537 65537 65537 65537 65537 65537 65537 131073 65538
+## [6,] 65537 65537 65537 65537 65537 65537 65537 65537  65538 65538
 </code></pre>
 
 <p>Note: There are actually two different Rcpp functions for each named function in Section 5.4.  One function processes compressed genotype data and the other function processes 
@@ -1720,7 +1721,7 @@ when necessary.</p>
 </code></pre>
 
 <pre><code>##   chr   gene nvariants   start     end      skat
-## 1   1 CEP104         8 3728644 3773797 0.4921572
+## 1   1 CEP104         8 3728644 3773797 0.5045343
 </code></pre>
 
 <pre><code class="r"># we will skip this line for the Vignette document production because it takes
@@ -1754,10 +1755,10 @@ Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, &quot;D&quot;, kernel = &quot;linear.weighted&qu
 </code></pre>
 
 <pre><code>##   chr   gene nvariants     start       end         skat
-## 1   1    AK5         4  77747662  78025654 0.0620303121
-## 2   1   ST7L         2 113066141 113153625 0.0268389550
-## 3   1 KIF26B         8 245318287 245809683 0.0074255053
-## 4   1  DISP1         4 222988431 223179337 0.0007740912
+## 1   1    AK5         4  77747662  78025654 0.0619543557
+## 2   1   ST7L         2 113066141 113153625 0.0281735752
+## 3   1 KIF26B         8 245318287 245809683 0.0091988468
+## 4   1  DISP1         4 222988431 223179337 0.0007739707
 </code></pre>
 
 <p>Note: we set verbose to FALSE otherwise there will be a large number of print outs indicating no markers are in the range.  (Recall the samples come
@@ -1786,55 +1787,55 @@ Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, &quot;D&quot;, kernel = &quot;linear.weighted&qu
 </code></pre>
 
 <pre><code>##    chr      gene nvariants     start       end         skat
-## 1    1   DDX11L1         8     11874     14409 0.0846402961
-## 2    1    NBPF20         4 144151519 144830407 0.1648571802
-## 3    1 GNG12-AS1         4  68297971  68668670 1.0000000000
-## 4    1  MIR548F1         4 186029867 186446655 0.7353797626
-## 5    1     TESK2         4  45809555  45956840 0.4674964311
-## 6    1   SDCCAG8         8 243419307 243663393 0.7426853536
-## 7    1     WDR63         8  85527993  85598821 0.9711157629
-## 8    1       CR1        12 207669473 207732829 0.8278369449
-## 9    1     GLIS1         4  53971906  54199877 0.4847135739
-## 10   1      DAB1         4  57463579  58716211 0.4639555297
-## 11   1       DPT         4 168664695 168698442 0.1576203501
-## 12   1       AK4         4  65613850  65697828 0.2515412901
-## 13   1      EPRS         8 220141942 220220000 0.9899369138
-## 14   1     NTNG1         4 107683549 107953207 0.2807769481
-## 15   1      ATF6        20 161736034 161933860 0.9339190112
-## 16   1    SRGAP2         8 206516200 206628046 0.0905194154
-## 17   1       AK5         4  77748287  78025654 0.0620068497
-## 18   1    BRINP3         4 190066797 190446759 0.8735658019
+## 1    1   DDX11L1         8     11874     14409 0.0845209331
+## 2    1    NBPF20         4 144151519 144830407 0.1555517855
+## 3    1 GNG12-AS1         4  68297971  68668670 0.8987092862
+## 4    1  MIR548F1         4 186029867 186446655 0.7314464583
+## 5    1     TESK2         4  45809555  45956840 0.4731215212
+## 6    1   SDCCAG8         8 243419307 243663393 0.7394635932
+## 7    1     WDR63         8  85527993  85598821 0.9865924310
+## 8    1       CR1        12 207669473 207732829 0.7774595097
+## 9    1     GLIS1         4  53971906  54199877 0.4621809275
+## 10   1      DAB1         4  57463579  58716211 0.4693967025
+## 11   1       DPT         4 168664695 168698442 0.1617702424
+## 12   1       AK4         4  65613850  65697828 0.2930833206
+## 13   1      EPRS         8 220141942 220220000 0.9982529906
+## 14   1     NTNG1         4 107683549 107953207 0.2896285129
+## 15   1      ATF6        20 161736034 161933860 0.9594313239
+## 16   1    SRGAP2         8 206516200 206628046 0.0915917545
+## 17   1       AK5         4  77748287  78025654 0.0619641376
+## 18   1    BRINP3         4 190066797 190446759 0.8099555543
 ## 19   1 LINC01140         4  87458690  87634886 1.0000000000
-## 20   1     KCNT2         4 196194913 196577499 0.5044404622
-## 21   1   TRABD2B         8  48226200  48462562 0.1929359215
+## 20   1     KCNT2         4 196194913 196577499 0.5019230008
+## 21   1   TRABD2B         8  48226200  48462562 0.2093742901
 ## 22   1   C1orf53         8 197871682 197876497 1.0000000000
-## 23   1      NCF2         4 183524697 183559739 0.3826109373
-## 24   1      NPR1         4 153651164 153666468 0.9849925340
-## 25   1   PLEKHO1         4 150122170 150131825 0.6819138316
-## 26   1     PI4KB         8 151264273 151300191 0.4217962428
-## 27   1     GDAP2         4 118406107 118472302 0.2977723677
-## 28   1      ST7L         2 113084413 113160839 0.0268640918
-## 29   1     MARC2        16 220921676 220957596 0.3624510455
-## 30   1    KIF26B         8 245318287 245866428 0.0081848424
-## 31   1      HHAT         4 210502640 210849638 0.2606710513
-## 32   1   GATAD2B         8 153777203 153895451 0.8801710709
-## 33   1     LRRC7         4  70225874  70589171 0.5432014880
-## 34   1     LRRC7         4  70032868  70340687 1.0000000000
-## 35   1      RGS7         4 240938817 241519126 0.5217017756
-## 36   1      RYR2         8 237205702 237997288 0.4834652788
+## 23   1      NCF2         4 183524697 183559739 0.3892765693
+## 24   1      NPR1         4 153651164 153666468 0.9172283284
+## 25   1   PLEKHO1         4 150122170 150131825 0.6497382268
+## 26   1     PI4KB         8 151264273 151300191 0.4073599880
+## 27   1     GDAP2         4 118406107 118472302 0.2945191409
+## 28   1      ST7L         2 113084413 113160839 0.0269488057
+## 29   1     MARC2        16 220921676 220957596 0.3579607045
+## 30   1    KIF26B         8 245318287 245866428 0.0084046253
+## 31   1      HHAT         4 210502640 210849638 0.2608214541
+## 32   1   GATAD2B         8 153777203 153895451 0.8628259014
+## 33   1     LRRC7         4  70225874  70589171 0.5305258276
+## 34   1     LRRC7         4  70032868  70340687 0.9086930599
+## 35   1      RGS7         4 240938817 241519126 0.5239404581
+## 36   1      RYR2         8 237205702 237997288 0.5056862133
 ## 37   1    SLC2A5         4   9101427   9129887 1.0000000000
-## 38   1    WASH7P        12     14362     16765 0.7071342621
+## 38   1    WASH7P        12     14362     16765 0.7082383758
 ## 39   1    WASH7P         8     15603     29370 1.0000000000
-## 40   1      EVI5         4  92974253  93257961 0.3026679740
-## 41   1     TTC13         4 231044160 231114618 0.8641946732
-## 42   1   C1orf21         4 184356150 184598155 0.2630128125
-## 43   1    IGSF21         4  18434240  18704977 0.5547831980
-## 44   1     DISP1         4 222988431 223179337 0.0007050738
-## 45   1       CD2         4 117297086 117311851 0.1018710010
-## 46   1  C1orf158         8  12806163  12819698 0.5091904943
-## 47   1    NOS1AP         4 162039581 162339813 0.2909785404
-## 48   1    CEP104         8   3750235   3773797 0.4914029118
-## 49   1    CDK11B         4   1571100   1647917 0.7791731244
+## 40   1      EVI5         4  92974253  93257961 0.3224391030
+## 41   1     TTC13         4 231044160 231114618 1.0000000000
+## 42   1   C1orf21         4 184356150 184598155 0.2701600737
+## 43   1    IGSF21         4  18434240  18704977 0.5511303802
+## 44   1     DISP1         4 222988431 223179337 0.0006742293
+## 45   1       CD2         4 117297086 117311851 0.1024771324
+## 46   1  C1orf158         8  12806163  12819698 0.4949042147
+## 47   1    NOS1AP         4 162039581 162339813 0.3184634720
+## 48   1    CEP104         8   3750235   3773797 0.4686271598
+## 49   1    CDK11B         4   1571100   1647917 0.7847902728
 </code></pre>
 
 <h1>8 Outputting Mega2R data to VCF format</h1>
@@ -1910,9 +1911,7 @@ It is worth noting that the internal logic does not create a genotype matrix for
 <p>Mega2R provides support for converting the
 data frames into &#39;GenABEL&#39; format (e.g. as gwaa.data-class objects) using the functions of GenABEL.</p>
 
-<p>The &#39;GenABEL&#39; package is available on CRAN as either as a toplevel
-package (<a href="https://CRAN.R-project.org/package=GenABEL">https://CRAN.R-project.org/package=GenABEL</a>) or in the
-archive.  The Mega2R library does not implicitly include GenABEL.
+<p>The &#39;GenABEL&#39; package is available on CRAN as (<a href="https://CRAN.R-project.org/package=GenABEL">https://CRAN.R-project.org/package=GenABEL</a>) in the archive (GenABEL was archived in late May 2018).  The Mega2R library does not implicitly include GenABEL.
 You must explicitly add the GenABEL library to your workspace.
 If Mega2R finds GenABEL in your workspace, the functions 
 <code>Mega2GenABEL</code> and <code>Mega2ENVGenABEL</code> will be available.  Otherwise,
@@ -1942,21 +1941,13 @@ They are deleted when the <code>Mega2GenABEL</code> function exits. The
 GenABEL functions <code>convert.snp.tped</code> and <code>load.gwaa.data</code> are explained in
 <a href="https://cran.r-project.org/package=GenABEL">https://cran.r-project.org/package=GenABEL</a>.</p>
 
-<p>If you haven&#39;t already, first install the &#39;GenABEL&#39; package from CRAN.</p>
+<p>If you haven&#39;t already, first install the &#39;GenABEL&#39; package from CRAN.  Since &#39;GenABEL&#39; is not
+readily available (and only available from the CRAN Archive), we will show you the commands and then what you would have seen if you had &#39;GenABEL&#39; installed.</p>
 
-<p>Then type:</p>
+<p>If you typed:</p>
 
 <pre><code class="r">require(&quot;GenABEL&quot;)
-</code></pre>
-
-<pre><code>## Loading required package: GenABEL
-</code></pre>
-
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called &#39;GenABEL&#39;
-</code></pre>
-
-<pre><code class="r"># Before issuing the next command, make sure you have issued this command
+# Before issuing the next command, make sure you have issued this command
 # `dump_mega2rtutorial_data()` first as instructed in the &#39;Tutorial Data&#39; section
 # above.
 db = file.path(where_mega2rtutorial_data(), &quot;seqsimr.db&quot;)
@@ -1967,15 +1958,80 @@ ENV = read.Mega2DB(db)
 seqsimgwaa = Mega2GenABEL()
 </code></pre>
 
-<pre><code>## Warning in Mega2GenABEL(): genABEL has been archived and is not available
+<p>You would see:</p>
+
+<pre><code>require(&quot;GenABEL&quot;)
+
+## Loading required package: GenABEL
+## Loading required package: MASS
+## 
+## Attaching package: &#39;MASS&#39;
+## The following object is masked _by_ &#39;.GlobalEnv&#39;:
+## 
+##     genotype
+
+## Loading required package: GenABEL.data
+# Before issuing the next command, make sure you have issued this command
+# `dump_mega2rtutorial_data()` first as instructed in the &#39;sTutorial Data&#39; section
+# above.
+
+db = file.path(where_mega2rtutorial_data(), &quot;seqsimr.db&quot;)
+ENV = read.Mega2DB(db)
+
+# This line converts the database to a gwaa.data-class object. The intermediate
+# files are in tempdir() and begin with &#39;Mega2GenABEL&#39;
+seqsimgwaa = Mega2GenABEL()
+
+## Reading individual ids from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tfam&#39; ...
+## ... done.  Read 1380 individual ids from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tfam&#39;
+## Reading genotypes from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tped&#39; ...
+## ...done.  Read 1000 SNPs from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tped&#39;
+## Writing to file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABELtped.raw&#39;
+## ...
+## ... done.
+## ids loaded...
+## marker names loaded...
+## chromosome data loaded...
+## map data loaded...
+## allele coding data loaded...
+## strand data loaded...
+## genotype data loaded...
+## snp.data object created...
+## assignment of gwaa.data object FORCED; X-errors were not checked!
 </code></pre>
 
-<p>You can use any of the GenABEL provided functions on the results, <code>seqsimgwaa</code>.</p>
+<p>You can use any of the GenABEL provided functions on the results, <code>seqsimgwaa</code>.  If you typed:</p>
 
 <pre><code class="r">str(seqsimgwaa)
 </code></pre>
 
-<pre><code>##  NULL
+<p>You would see:</p>
+
+<pre><code>str(seqsimgwaa)
+
+## Formal class &#39;gwaa.data&#39; [package &quot;GenABEL&quot;] with 2 slots
+##   ..@ phdata:&#39;data.frame&#39;:   1380 obs. of  3 variables:
+##   .. ..$ id     : chr [1:1380] &quot;1SAP039_H05-0107&quot; &quot;1SAP039_H05-0106&quot; &quot;1SAP039_SAP039F14&quot; &quot;1SAP039_SAP039F13&quot; ...
+##   .. ..$ sex    : int [1:1380] 0 1 1 1 1 0 0 0 0 0 ...
+##   .. ..$ default: int [1:1380] 1 1 1 1 1 1 1 1 1 1 ...
+##   ..@ gtdata:Formal class &#39;snp.data&#39; [package &quot;GenABEL&quot;] with 11 slots
+##   .. .. ..@ nbytes    : num 345
+##   .. .. ..@ nids      : int 1380
+##   .. .. ..@ nsnps     : int 1000
+##   .. .. ..@ idnames   : chr [1:1380] &quot;1SAP039_H05-0107&quot; &quot;1SAP039_H05-0106&quot; &quot;1SAP039_SAP039F14&quot; &quot;1SAP039_SAP039F13&quot; ...
+##   .. .. ..@ snpnames  : chr [1:1000] &quot;snp1&quot; &quot;snp2&quot; &quot;snp3&quot; &quot;snp4&quot; ...
+##   .. .. ..@ chromosome: Factor w/ 1 level &quot;1&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:1000] &quot;snp1&quot; &quot;snp2&quot; &quot;snp3&quot; &quot;snp4&quot; ...
+##   .. .. ..@ map       : Named num [1:1000] 2 3 4 5 201 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:1000] &quot;snp1&quot; &quot;snp2&quot; &quot;snp3&quot; &quot;snp4&quot; ...
+##   .. .. ..@ coding    :Formal class &#39;snp.coding&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:1000] 01 01 01 01 ...
+##   .. .. ..@ strand    :Formal class &#39;snp.strand&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:1000] 00 00 00 00 ...
+##   .. .. ..@ male      : Named int [1:1380] 0 1 1 1 1 0 0 0 0 0 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:1380] &quot;1SAP039_H05-0107&quot; &quot;1SAP039_H05-0106&quot; &quot;1SAP039_SAP039F14&quot; &quot;1SAP039_SAP039F13&quot; ...
+##   .. .. ..@ gtps      :Formal class &#39;snp.mx&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:345, 1:1000] 59 55 55 55 ...
 </code></pre>
 
 <h1>10 Regression testing</h1>
@@ -2157,19 +2213,14 @@ executable available.</strong></p>
 We intend to verify that the object generated 
 by <code>Mega2GenABEL</code> is the same as a GenABEL object we started with.
 First, we load <code>GenABEL</code> and access its data:
-<strong>NOTE: The code in this section can not really be executed, if you do not have GenABEL available on your machine.</strong></p>
+<strong>NOTE: The code in this section can not really be executed, if you do not have GenABEL available on your machine.</strong>  But we have an old version of GenABEL and will show you in the example below
+what you should see.</p>
 
 <pre><code class="r">GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
+if (GotGenABEL) data(srdta) else srdta = NULL
 </code></pre>
 
-<pre><code>## Loading required package: GenABEL
-</code></pre>
-
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called &#39;GenABEL&#39;
-</code></pre>
-
-<pre><code class="r">if (GotGenABEL) data(srdta)
+<pre><code>The previous code does not display anything.
 </code></pre>
 
 <p>Then we use the GenABEL export.plink() function to dump the GenABEL data as
@@ -2177,18 +2228,17 @@ PLINK .ped/.map/.phe files.  The latter will be processed by Mega2 to generate a
 database.</p>
 
 <pre><code class="r">GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
-</code></pre>
 
-<pre><code>## Loading required package: GenABEL
-</code></pre>
-
-<pre><code class="r"># Before issuing the next command, make sure you have issued this command
+# Before issuing the next command, make sure you have issued this command
 # `dump_mega2rtutorial_data()` first as instructed in the &#39;Tutorial Data&#39; section
 # above.
+
 srdtafile = file.path(where_mega2rtutorial_data(), &quot;srdta&quot;)
 if (GotGenABEL) export.plink(srdta, transpose = FALSE, filebasename = srdtafile, 
     phenotypes = names(srdta@phdata)[-(1:2)])
 </code></pre>
+
+<p>The previous code does not display anything.</p>
 
 <p>To produce the Mega2 database <code>srdta.db</code>, we switch to the Unix command line, cd to 
 the temporary directory, with the name given by the results of this R command <code>where_mega2rtutorial_data()</code>, and run:</p>
@@ -2443,19 +2493,10 @@ Default_Outfile_Names=yes  </p>
 <p>Note: We have provided a copy of the srdta.db database in the Mega2R package.  So
 you can proceed with the steps that follow, even if you did not create your own database.</p>
 
-<p>Now, we go back into R and run Mega2GenABEL().  Type:</p>
+<p>Now, we go back into R and run Mega2GenABEL().  If you type:</p>
 
 <pre><code class="r">GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
-</code></pre>
-
-<pre><code>## Loading required package: GenABEL
-</code></pre>
-
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called &#39;GenABEL&#39;
-</code></pre>
-
-<pre><code class="r"># Before issuing the next command, make sure you have issued this command
+# Before issuing the next command, make sure you have issued this command
 # `dump_mega2rtutorial_data()` first as instructed in the &#39;Tutorial Data&#39; section
 # above.
 sdb = file.path(where_mega2rtutorial_data(), &quot;srdta.db&quot;)
@@ -2464,56 +2505,172 @@ ENV = read.Mega2DB(sdb)
 mega = Mega2GenABEL()
 </code></pre>
 
-<pre><code>## Warning in Mega2GenABEL(): genABEL has been archived and is not available
+<p>You will see:</p>
+
+<pre><code>GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
+
+# Before issuing the next command, make sure you have issued this command
+# `dump_mega2rtutorial_data()` first as instructed in the &#39;Tutorial Data&#39; section
+# above.
+
+sdb = file.path(where_mega2rtutorial_data(), &quot;srdta.db&quot;)
+ENV = read.Mega2DB(sdb)
+
+mega = Mega2GenABEL()
+
+## Reading individual ids from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tfam&#39; ...
+## ... done.  Read 2500 individual ids from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tfam&#39;
+## Reading genotypes from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tped&#39; ...
+## ...done.  Read 833 SNPs from file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABEL.tped&#39;
+## Writing to file &#39;/var/folders/kn/h793jrls0n39bdym6d7531qr0000gp/T//RtmpNtrIhU/Mega2GenABELtped.raw&#39; ...
+## ... done.
+## ids loaded...
+## marker names loaded...
+## chromosome data loaded...
+## map data loaded...
+## allele coding data loaded...
+## strand data loaded...
+## genotype data loaded...
+## snp.data object created...
+## assignment of gwaa.data object FORCED; X-errors were not checked!
 </code></pre>
 
 <p><strong>NOTE: The code below will check if you have GenABEL available on your machine,
-if it is not available the code in this section can not really be executed.</strong></p>
+if it is not available the code in this section can not really be executed.
+But, we will show you the expected results.</strong></p>
 
 <p><code>mega</code> should be the same as the <code>srdta</code> gwaa.data-class object. You can
-compare them however you prefer.    For example, in R, type:</p>
+compare them however you prefer.    For example, in R, if you type:</p>
 
 <pre><code class="r">GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
+str(mega)
+if (GotGenABEL) str(srdta)
 </code></pre>
 
-<pre><code>## Loading required package: GenABEL
-</code></pre>
+<p>You will see:</p>
 
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called &#39;GenABEL&#39;
-</code></pre>
+<pre><code>GotGenABEL = require(&quot;GenABEL&quot;, quietly=FALSE)
+str(mega)
 
-<pre><code class="r">str(mega)
-</code></pre>
+## Formal class &#39;gwaa.data&#39; [package &quot;GenABEL&quot;] with 2 slots
+##   ..@ phdata:&#39;data.frame&#39;:   2500 obs. of  8 variables:
+##   .. ..$ id     : chr [1:2500] &quot;1_p1&quot; &quot;2_p2&quot; &quot;3_p3&quot; &quot;4_p4&quot; ...
+##   .. ..$ sex    : int [1:2500] 1 1 0 1 1 0 0 1 0 0 ...
+##   .. ..$ age    : num [1:2500] 43.4 48.2 37.9 53.8 47.5 45 52 42.5 29.7 45.8 ...
+##   .. ..$ qt1    : num [1:2500] -0.58 0.8 -0.52 -1.55 0.25 0.15 -0.56 -9 -2.26 -1.32 ...
+##   .. ..$ qt2    : num [1:2500] 4.46 6.32 3.26 888 5.7 4.65 4.64 5.77 0.71 3.26 ...
+##   .. ..$ qt3    : num [1:2500] 1.43 3.9 5.05 3.76 2.89 1.87 2.49 2.68 1.45 0.85 ...
+##   .. ..$ bt     : int [1:2500] 0 1 1 1 1 0 0 1 0 0 ...
+##   .. ..$ default: int [1:2500] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..@ gtdata:Formal class &#39;snp.data&#39; [package &quot;GenABEL&quot;] with 11 slots
+##   .. .. ..@ nbytes    : num 625
+##   .. .. ..@ nids      : int 2500
+##   .. .. ..@ nsnps     : int 833
+##   .. .. ..@ idnames   : chr [1:2500] &quot;1_p1&quot; &quot;2_p2&quot; &quot;3_p3&quot; &quot;4_p4&quot; ...
+##   .. .. ..@ snpnames  : chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ chromosome: Factor w/ 1 level &quot;1&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ map       : Named num [1:833] 2500 3500 5750 13500 14250 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ coding    :Formal class &#39;snp.coding&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:833] 08 0b 0c 07 ...
+##   .. .. ..@ strand    :Formal class &#39;snp.strand&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:833] 00 00 00 00 ...
+##   .. .. ..@ male      : Named int [1:2500] 1 1 0 1 1 0 0 1 0 0 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:2500] &quot;1_p1&quot; &quot;2_p2&quot; &quot;3_p3&quot; &quot;4_p4&quot; ...
+##   .. .. ..@ gtps      :Formal class &#39;snp.mx&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:625, 1:833] 55 59 55 a5 ...
 
-<pre><code>##  NULL
-</code></pre>
 
-<pre><code class="r">if (GotGenABEL) str(srdta)
+if (GotGenABEL) str(srdta)
+
+
+## Formal class &#39;gwaa.data&#39; [package &quot;GenABEL&quot;] with 2 slots
+##   ..@ phdata:&#39;data.frame&#39;:   2500 obs. of  7 variables:
+##   .. ..$ id : chr [1:2500] &quot;p1&quot; &quot;p2&quot; &quot;p3&quot; &quot;p4&quot; ...
+##   .. ..$ sex: int [1:2500] 1 1 0 1 1 0 0 1 0 0 ...
+##   .. ..$ age: num [1:2500] 43.4 48.2 37.9 53.8 47.5 45 52 42.5 29.7 45.8 ...
+##   .. ..$ qt1: num [1:2500] -0.58 0.8 -0.52 -1.55 0.25 0.15 -0.56 NA -2.26 -1.32 ...
+##   .. ..$ qt2: num [1:2500] 4.46 6.32 3.26 888 5.7 4.65 4.64 5.77 0.71 3.26 ...
+##   .. ..$ qt3: num [1:2500] 1.43 3.9 5.05 3.76 2.89 1.87 2.49 2.68 1.45 0.85 ...
+##   .. ..$ bt : int [1:2500] 0 1 1 1 1 0 0 1 0 0 ...
+##   ..@ gtdata:Formal class &#39;snp.data&#39; [package &quot;GenABEL&quot;] with 11 slots
+##   .. .. ..@ nbytes    : num 625
+##   .. .. ..@ nids      : int 2500
+##   .. .. ..@ nsnps     : int 833
+##   .. .. ..@ idnames   : chr [1:2500] &quot;p1&quot; &quot;p2&quot; &quot;p3&quot; &quot;p4&quot; ...
+##   .. .. ..@ snpnames  : chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ chromosome: Factor w/ 1 level &quot;1&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ map       : Named num [1:833] 2500 3500 5750 13500 14250 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:833] &quot;rs10&quot; &quot;rs18&quot; &quot;rs29&quot; &quot;rs65&quot; ...
+##   .. .. ..@ coding    :Formal class &#39;snp.coding&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:833] 08 0b 0c 03 ...
+##   .. .. ..@ strand    :Formal class &#39;snp.strand&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:833] 01 01 02 01 ...
+##   .. .. ..@ male      : Named int [1:2500] 1 1 0 1 1 0 0 1 0 0 ...
+##   .. .. .. ..- attr(*, &quot;names&quot;)= chr [1:2500] &quot;p1&quot; &quot;p2&quot; &quot;p3&quot; &quot;p4&quot; ...
+##   .. .. ..@ gtps      :Formal class &#39;snp.mx&#39; [package &quot;GenABEL&quot;] with 1 slot
+##   .. .. .. .. ..@ .Data: raw [1:625, 1:833] 55 59 55 a5 ...
 </code></pre>
 
 <p>You can compare these printouts by eye.  Alternatively, 
 the function <em>Mega2GenABELtst()</em> can be used to
-compare the phenotype data, genotype data, and object metadata, item by item.</p>
+compare the phenotype data, genotype data, and object metadata, item by item.
+If you type:</p>
 
 <pre><code class="r">GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
-</code></pre>
-
-<pre><code>## Loading required package: GenABEL
-</code></pre>
-
-<pre><code>## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-## logical.return = TRUE, : there is no package called &#39;GenABEL&#39;
-</code></pre>
-
-<pre><code class="r">options(max.print = 30)
+options(max.print = 30)
 Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
 </code></pre>
 
-<pre><code>## Warning in Mega2GenABELtst(mega_ = mega, gwaa_ = srdta): One or both GenABEL arguments are NULL.  Aborting.
-</code></pre>
+<p>You will see:</p>
 
-<pre><code>## NULL
+<pre><code>GotGenABEL = require(&quot;GenABEL&quot;, quietly = FALSE)
+options(max.print = 30)
+Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
+
+## all(mega_@phdata$sex == gwaa_@phdata$sex) [1] TRUE
+## all(mega_@phdata$age == gwaa_@phdata$age) [1] TRUE
+## all(mega_@phdata$qt1 == gwaa_@phdata$qt1) [1] TRUE
+## all(mega_@phdata$qt2 == gwaa_@phdata$qt2) [1] TRUE
+## all(mega_@phdata$qt3 == gwaa_@phdata$qt3) [1] TRUE
+## all(mega_@phdata$bt == gwaa_@phdata$bt) [1] TRUE
+## all(mega_@gtdata@nids == gwaa_@gtdata@nids)[1] TRUE
+## all(mega_@gtdata@nsnps == gwaa_@gtdata@nsnps)[1] TRUE
+## all(mega_@gtdata@nbytes == gwaa_@gtdata@nbytes)[1] TRUE
+## all(mega_@gtdata@idnames == gwaa_@gtdata@idnames)[1] FALSE
+## all(mega_@gtdata@snpnames == gwaa_@gtdata@snpnames)[1] TRUE
+## all(mega_@gtdata@chromosome == gwaa_@gtdata@chromosome)[1] TRUE
+## all(mega_@gtdata@map == gwaa_@gtdata@map)[1] TRUE
+## all(mega_@gtdata@male == gwaa_@gtdata@male)[1] TRUE
+## all(mega_@gtdata@coding == gwaa_@gtdata@coding)[1] FALSE
+## all(mega_@gtdata@strand == gwaa_@gtdata@strand)[1] FALSE
+## all(mega_@gtdata@gtps == gwaa_@gtdata@gtps)[1] FALSE
+## all(mega_@gtdata == gwaa_@gtdata)[1] TRUE
+##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [1] &quot;markers that differ&quot;
+## [1] &quot;markers that differ&quot;
+##     locus_link locus_link_fill MarkerName chromosome position
+## 4            9               9       rs65          1    13500
+## 8           13              13      rs130          1    27250
+## 10          15              15      rs150          1    33250
+## 20          25              25      rs324          1    82500
+## 23          28              28      rs348          1    88000
+## 24          29              29      rs361          1    90000
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 209 rows ]
+## [1] &quot;allele values for markers that differ&quot;
+## [1] &quot;allele values for markers that differ&quot;
+##     locus_link pId.x AlleleName.x Frequency.x indexX.x pId.y AlleleName.y
+## 4            9    19            A  0.28027754        1    20            T
+## 8           13    27            A  0.30622110        1    28            G
+## 10          15    31            A  0.65998312        1    32            C
+##     Frequency.y indexX.y
+## 4    0.71972246        2
+## 8    0.69377890        2
+## 10   0.34001688        2
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 212 rows ]
 </code></pre>
 
 <p>**NOTE

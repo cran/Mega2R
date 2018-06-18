@@ -247,54 +247,55 @@ Mega2VCF(vcffile, ENV$markers[ENV$markers$chromosome==1 ,])
 vcfdir = file.path(where_mega2rtutorial_data(), "vcfr")
 list.files(vcfdir)
 
-## ----seqsimgwaa----------------------------------------------------------
-require("GenABEL")
-# Before issuing the next command, make sure you have issued
-# this command `dump_mega2rtutorial_data()` first
-# as instructed in the "Tutorial Data' section above.
-db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
-ENV = read.Mega2DB(db)
+## ----seqsimgwaa, eval=FALSE----------------------------------------------
+#  require("GenABEL")
+#  # Before issuing the next command, make sure you have issued
+#  # this command `dump_mega2rtutorial_data()` first
+#  # as instructed in the "Tutorial Data' section above.
+#  db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+#  ENV = read.Mega2DB(db)
+#  
+#  # This line converts the database to a gwaa.data-class object. The intermediate
+#  # files are in tempdir() and begin with "Mega2GenABEL"
+#  seqsimgwaa = Mega2GenABEL()
 
-# This line converts the database to a gwaa.data-class object. The intermediate
-# files are in tempdir() and begin with "Mega2GenABEL"
-seqsimgwaa = Mega2GenABEL()
+## ----strseqsimgwaa, eval=FALSE-------------------------------------------
+#  str(seqsimgwaa)
 
-## ----strseqsimgwaa-------------------------------------------------------
-str(seqsimgwaa)
+## ----srdta, eval=FALSE---------------------------------------------------
+#  GotGenABEL = require("GenABEL", quietly=FALSE)
+#  if (GotGenABEL) data(srdta) else srdta=NULL
 
-## ----srdta---------------------------------------------------------------
-GotGenABEL = require("GenABEL", quietly=FALSE)
-if (GotGenABEL) data(srdta)
+## ----dmpPed,results="hide",warning=FALSE,eval=FALSE----------------------
+#  GotGenABEL = require("GenABEL", quietly=FALSE)
+#  
+#  # Before issuing the next command, make sure you have issued
+#  # this command `dump_mega2rtutorial_data()` first
+#  # as instructed in the "Tutorial Data' section above.
+#  
+#  srdtafile = file.path(where_mega2rtutorial_data(), "srdta")
+#  if (GotGenABEL) export.plink(srdta, transpose = FALSE, filebasename = srdtafile,
+#               phenotypes = names(srdta@phdata)[-(1:2)])
 
-## ----dmpPed,results="hide",warning=FALSE---------------------------------
-GotGenABEL = require("GenABEL", quietly=FALSE)
+## ---- srdta.db,eval=FALSE------------------------------------------------
+#  GotGenABEL = require("GenABEL", quietly=FALSE)
+#  # Before issuing the next command, make sure you have issued
+#  # this command `dump_mega2rtutorial_data()` first
+#  # as instructed in the "Tutorial Data' section above.
+#  sdb = file.path(where_mega2rtutorial_data(), "srdta.db")
+#  ENV = read.Mega2DB(sdb)
+#  
+#  mega = Mega2GenABEL()
 
-# Before issuing the next command, make sure you have issued
-# this command `dump_mega2rtutorial_data()` first
-# as instructed in the "Tutorial Data' section above.
-srdtafile = file.path(where_mega2rtutorial_data(), "srdta")
-if (GotGenABEL) export.plink(srdta, transpose = FALSE, filebasename = srdtafile,
-             phenotypes = names(srdta@phdata)[-(1:2)])
+## ----strs, eval=FALSE----------------------------------------------------
+#  GotGenABEL = require("GenABEL", quietly=FALSE)
+#  str(mega)
+#  if (GotGenABEL) str(srdta)
 
-## ---- srdta.db,eval=TRUE-------------------------------------------------
-GotGenABEL = require("GenABEL", quietly=FALSE)
-# Before issuing the next command, make sure you have issued
-# this command `dump_mega2rtutorial_data()` first
-# as instructed in the "Tutorial Data' section above.
-sdb = file.path(where_mega2rtutorial_data(), "srdta.db")
-ENV = read.Mega2DB(sdb)
-
-mega = Mega2GenABEL()
-
-## ----strs----------------------------------------------------------------
-GotGenABEL = require("GenABEL", quietly=FALSE)
-str(mega)
-if (GotGenABEL) str(srdta)
-
-## ----mega2genabeltst-----------------------------------------------------
-GotGenABEL = require("GenABEL", quietly=FALSE)
-options(max.print = 30)
-Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
+## ----mega2genabeltst, eval=FALSE-----------------------------------------
+#  GotGenABEL = require("GenABEL", quietly=FALSE)
+#  options(max.print = 30)
+#  Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
 
 ## ---- fin,eval=TRUE,echo=FALSE-------------------------------------------
 clean_mega2rtutorial_data()

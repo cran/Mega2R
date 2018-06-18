@@ -80,6 +80,8 @@ Mega2VCF = function(prefix, markers=NULL, mapno = 0, alleleOrder = 'default', en
 
     if (is.null(markers)) markers = envir$markers
 
+    match49r = FALSE
+    
     mkVCFhdr(prefix, markers, envir)
 
     z = c("./.", "./0", "./1", "./2", "0/.", "0/0", "0/1", "0/2",
@@ -159,6 +161,11 @@ Mega2VCF = function(prefix, markers=NULL, mapno = 0, alleleOrder = 'default', en
             } else if (alleleOrder == 'minor' && any(AF < RF)) {
                 whichFlip = which(AF < RF)
                 doFlip = TRUE
+            } else if (match49r && any (ALT < REF) ) {
+                whichFlip = which(ALT < REF)
+                whichFlip = whichFlip[ALT[whichFlip] != "0"]
+                whichFlip = whichFlip[AF[whichFlip] != 0]
+                doFlip = TRUE
             } else
                 doFlip = FALSE
             if (doFlip) {
@@ -189,8 +196,10 @@ Mega2VCF = function(prefix, markers=NULL, mapno = 0, alleleOrder = 'default', en
         GPos = map_table[map_table$map==mapno, c("position", "pos_female", "pos_male")][R, ]
         GPosPos = sprintf("%.2f", GPos$position)
         GPosFem = rep(".", L)
+        GPos[is.na(GPos$pos_female),2] = -99.99
         GPosFem[GPos$pos_female != -99.99] = sprintf("%f", GPos$pos_female[GPos$pos_female != -99.99])
         GPosMal = rep(".", L)
+        GPos[is.na(GPos$pos_male),3] = -99.99
         GPosMal[GPos$pos_male   != -99.99] = sprintf("%f", GPos$pos_male[GPos$pos_male != -99.99])
 
         INFO=paste0("CM=", GPosPos, ",", GPosFem, ",", GPosMal,
@@ -442,6 +451,7 @@ mkVCFmap = function (prefix, markers, envir) {
         if ( mapnames_table[m+1, "female_sex_map"] != 0) {
             POSF  = map_table[map_table$map == m, "pos_female"]
 #std
+            POSF[is.na(POSF$pos_female)] = -99.99
             POSFS = sprintf("%.6f", POSF)
             TBL  = cbind(TBL, POSFS)
             hdr = paste0(hdr, "\t", mapnames_table[mapnames_table$map == m, "name"], '.k.f')
@@ -450,6 +460,7 @@ mkVCFmap = function (prefix, markers, envir) {
         if ( mapnames_table[m+1, "male_sex_map"] != 0) {
             POSM  = map_table[map_table$map == m, "pos_male"]
 #std
+            POSM[is.na(POSM$pos_male)] = -99.99
             POSMS = sprintf("%.6f", POSM)
             TBL  = cbind(TBL, POSMS)
             hdr = paste0(hdr, "\t", mapnames_table[mapnames_table$map == m, "name"], '.k.m')

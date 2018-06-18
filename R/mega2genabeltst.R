@@ -112,14 +112,16 @@ dmpPed = function(gwaa_ = srdta, pfx, default = "bt") {
 #' @importFrom utils data
 #'
 #' @examples
+#'\dontrun{
 #' db = system.file("exdata", "seqsimm.db", package="Mega2R")
 #' require("GenABEL")
 #' ENV = read.Mega2DB(db)
 #'
 #' y = Mega2ENVGenABEL()
 #' Mega2GenABELtst(y, y, full = FALSE)
+#'}
 #'
-#' \donttest{
+#' \dontrun{
 #' # donttestcheck: if you have more time, try ...
 #' x = Mega2GenABEL()
 #' Mega2GenABELtst(x, y, full = FALSE)
@@ -233,12 +235,7 @@ Mega2GenABELtst = function (mega_ = mega, gwaa_ = srdta, full = TRUE, envir = EN
         print("markers that differ")
         print("markers that differ")
         print(envir$markers[cd,])
-        if (envir$MARKER_SCHEME == 1) {
-            ms = envir$markerscheme_table[envir$markerscheme_table$key %in% envir$markers$locus_link,]
-            print("markerscheme_table (compression) alleles that differ")
-            print("markerscheme_table (compression) alleles that differ")
-            print(ms[cd,])
-        }
+
         print("allele values for markers that differ")
         print("allele values for markers that differ")
         print(mm[cd,])

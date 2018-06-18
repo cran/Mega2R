@@ -39,6 +39,15 @@ NULL
 #library(DBI)
 #library(RSQLite)
 
+#' Mega2R version
+#'
+#' @description This string indicates the current release of Mega2R
+#'
+#' @author Robert V Baron
+#' @docType data
+#' @name Mega2RVersion
+Mega2RVersion = '5.0.0'
+
 #
 # how to load refRanges & refIndices to sysdata
 #
@@ -57,7 +66,7 @@ NULL
 #' @name Mega2R-TBLS
 TBLS = c("int_table",
 #        "double_table",
-#        "charstar_table",
+         "charstar_table",
 #        "stuff_table",
 #        "batch_parameters",
 #        "file_table",
@@ -71,7 +80,7 @@ TBLS = c("int_table",
          "locus_table",
          "allele_table",
          "marker_table",
-         "markerscheme_table",
+#        "markerscheme_table",
          "map_table",
          "mapnames_table",
 
@@ -312,10 +321,34 @@ dbmega2_import = function(dbname,
 
     dbDisconnect(con)
 
-    envir$PhenoCnt      = envir$int_table[envir$int_table$key == 'PhenoCnt', 3]
-    envir$LocusCnt      = envir$int_table[envir$int_table$key == 'LocusCnt', 3]
-    envir$MARKER_SCHEME = envir$int_table[envir$int_table$key == 'MARKER_SCHEME', 3]
-    envir$DBcompress    = envir$int_table[envir$int_table$key == 'dbCompression', 3]
+    envir$PhenoCnt       = envir$int_table[envir$int_table$key == 'PhenoCnt', 3]
+    envir$LocusCnt       = envir$int_table[envir$int_table$key == 'LocusCnt', 3]
+    envir$MARKER_SCHEME  = envir$int_table[envir$int_table$key == 'MARKER_SCHEME', 3]
+    envir$DBcompress     = envir$int_table[envir$int_table$key == 'dbCompression', 3]
+    envir$DBMega2Version = envir$charstar_table[envir$charstar_table$key == 'DBMega2Version', 3]
+    
+    lt3 = function(aa, bb) {
+                            ( (aa[1] < bb[1]) || ( (aa[1] == bb[1]) &&
+                                            ( (aa[2] < bb[2]) || (aa[2] == bb[2] && (aa[3] < bb[3])) ) ) )
+            }
+    lt2 = function(aa, bb) {
+                            ( (aa[1] < bb[1]) || ( (aa[1] == bb[1]) && (aa[2] < bb[2]) ) ) 
+            }
+    cc = envir$DBMega2Version != 'X.Y.Z'
+    if (cc) {
+        aa = as.numeric(strsplit(envir$DBMega2Version, split=".", fixed=T)[[1]])
+        bb = as.numeric(strsplit(Mega2RVersion,        split=".", fixed=T)[[1]])
+        lt = lt2(aa, bb)
+        if (lt) {
+           message("NOTE: Mega2R cannot read the Mega2 database because its version (", envir$DBMega2Version, ") is too old.")
+           stop("Please recreate the database using the current version of Mega2.", call.=FALSE)
+        }
+        lt = lt2(bb, aa)
+        if (lt) {
+           message("NOTE: Mega2R cannot read the Mega2 database because Mega2R version (", Mega2RVersion, ") is too old.")
+           stop("Please get the latest version of Mega2R from CRAN.", call.=FALSE)
+        }
+    }
 
     if ( length(envir$DBcompress) == 0) envir$DBcompress = 0
     
@@ -670,7 +703,7 @@ getgenotypes_R = function(markers_arg, sepstr = "", envir = ENV) {
   return
     if (envir$MARKER_SCHEME == 1) {
         getgenotypes_Ri(markers_arg$locus_link, markers_arg$locus_link_fill,
-                        envir$unified_genotype_table, envir$allele_table, envir$markerscheme_table,
+                        envir$unified_genotype_table, envir$allele_table,
                         sepstr, envir$PhenoCnt)
     } else {  # must be == 2
 
@@ -733,7 +766,7 @@ getgenotypes = function(markers_arg, sepstr = "", envir = ENV) {
   return
     if (envir$MARKER_SCHEME == 1) {
         getgenotypes_1(markers_arg$locus_link, markers_arg$locus_link_fill,
-                       envir$unified_genotype_table, envir$allele_table, envir$markerscheme_table,
+                       envir$unified_genotype_table, envir$allele_table,
                        sepstr, envir$PhenoCnt)
     } else {  # must be == 2
         getgenotypes_2(markers_arg$locus_link,
@@ -797,7 +830,7 @@ getgenotypesraw = function(markers_arg, envir = ENV) {
   return
     if (envir$MARKER_SCHEME == 1) {
         getgenotypesraw_1(markers_arg$locus_link, markers_arg$locus_link_fill,
-                          envir$unified_genotype_table, envir$allele_table, envir$markerscheme_table,
+                          envir$unified_genotype_table, envir$allele_table,
                           envir$PhenoCnt)
     } else {  # must be == 2
         getgenotypesraw_2(markers_arg$locus_link,
@@ -864,7 +897,7 @@ getgenotypesgenabel = function(markers_arg, envir = ENV) {
     if (envir$MARKER_SCHEME == 1) {
         getgenotypesgenabel_1(markers_arg$locus_link, markers_arg$locus_link_fill,
                               envir$unified_genotype_table, envir$allele_table,
-                              envir$markerscheme_table, envir$PhenoCnt)
+                              envir$PhenoCnt)
     } else {  # must be == 2
         getgenotypesgenabel_2(markers_arg$locus_link,
                               envir$unified_genotype_table, envir$locus_allele_table,
