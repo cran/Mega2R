@@ -4,21 +4,24 @@
 \alias{init_pedgene}
 \title{load Mega2 SQLite database and perform initialization for pedgene usage}
 \usage{
-init_pedgene(db = NULL, verbose = FALSE)
+init_pedgene(db = NULL, verbose = FALSE, traitname = "default", ...)
 }
 \arguments{
 \item{db}{specifies the path of a \bold{Mega2} SQLite database containing study data.}
 
 \item{verbose}{TRUE indicates that diagnostic printouts should be enabled.
 This value is saved in the returned environment.}
+
+\item{traitname}{Name of the affection status trait to use to set the case/control status; default value = "default".}
+
+\item{...}{fed to \emph{dbmega2_import()}; should be bpPosMap= to select from the maps of
+base pairs, if the default is not desired.}
 }
 \value{
 "environment" containing data frames from an SQLite database and some computed values.
 }
 \description{
-This populates the \bold{R} data frames from the specified \bold{Mega2} SQLite database.  It then
- prunes the samples to only include members that have a definite case or control
- status.  Undefined samples are ignored; this is necessary for CRAN \code{pedgene}.
+This populates the \bold{R} data frames from the specified \bold{Mega2} SQLite database.
 }
 \note{
 \emph{init_pedgene} calculates schaidPed and pedPer that are used later in the \emph{Dopedgene} calculation.
@@ -29,10 +32,10 @@ This populates the \bold{R} data frames from the specified \bold{Mega2} SQLite d
 }
 \examples{
 db = system.file("exdata", "seqsimm.db", package="Mega2R")
-ENV = init_pedgene(db)
+ENV = init_pedgene(db, traitname = "default")
 ls(ENV)
 
 }
 \seealso{
-\code{\link{DOpedgene}}, \code{\link{Mega2pedgene}}
+\code{\link{DOpedgene}}, \code{\link{Mega2pedgene}}, \code{\link{mkfam}}
 }

@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -175,7 +175,8 @@ Mega2VCF = function(prefix, markers=NULL, mapno = 0, alleleOrder = 'default', en
                 RF[whichFlip] = AF[whichFlip]
                 AF[whichFlip] = XF[whichFlip]
             }
-            AF = sprintf("%.6f", AF)
+#           AF = sprintf("%.6f", AF)
+            AF = sprintf("%g", round(AF, 6))
         } else if (envir$MARKER_SCHEME == 2) {
             REF = character(L)
             ALT = character(L)
@@ -190,22 +191,24 @@ Mega2VCF = function(prefix, markers=NULL, mapno = 0, alleleOrder = 'default', en
                 REF[k] = nxx$AlleleName[1]
                 RF[k]  = nxx$Frequency[1]
                 ALT[k] = paste0(nxx$AlleleName[2:nrows], collapse=",")
-                AF[k]  = paste0(sprintf("%.6f", nxx$Frequency[2:nrows]), collapse=",")
+#               AF[k]  = paste0(sprintf("%.6f", nxx$Frequency[2:nrows]), collapse=",")
+                AF[k]  = paste0(sprintf("%g", round(nxx$Frequency[2:nrows], 6)), collapse=",")
             }
         }
         GPos = map_table[map_table$map==mapno, c("position", "pos_female", "pos_male")][R, ]
-        GPosPos = sprintf("%.2f", GPos$position)
+        GPosPos = sprintf("%g", round(GPos$position, 2))
         GPosFem = rep(".", L)
         GPos[is.na(GPos$pos_female),2] = -99.99
-        GPosFem[GPos$pos_female != -99.99] = sprintf("%f", GPos$pos_female[GPos$pos_female != -99.99])
+        GPosFem[GPos$pos_female != -99.99] = sprintf("%g", round(GPos$pos_female[GPos$pos_female != -99.99], 2))
         GPosMal = rep(".", L)
         GPos[is.na(GPos$pos_male),3] = -99.99
-        GPosMal[GPos$pos_male   != -99.99] = sprintf("%f", GPos$pos_male[GPos$pos_male != -99.99])
+        GPosMal[GPos$pos_male   != -99.99] = sprintf("%g", round(GPos$pos_male[GPos$pos_male != -99.99], 2))
 
         INFO=paste0("CM=", GPosPos, ",", GPosFem, ",", GPosMal,
-                    ";RF=", sprintf("%.6f", RF),
-                    ";AF=", AF,
-                    ";")
+#                   ";RF=", sprintf("%.6f", RF),
+                    ";RF=", sprintf("%g", round(RF, 6)),
+                    ";AF=", AF)
+#                   ";")
         block[BR , 4] = REF[BR]
         block[BR , 5] = ALT[BR]
 #       block[BR , 6] = QUAL[BR]

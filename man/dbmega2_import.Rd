@@ -5,13 +5,15 @@
 \title{read Mega2 SQLite database into R}
 \usage{
 dbmega2_import(dbname,
-               bpPosMap = 1,
+               bpPosMap = NULL,
                verbose = FALSE)
 }
 \arguments{
 \item{dbname}{file path to SQLite database.}
 
-\item{bpPosMap}{index that specifies which map in the map_table should be used for marker chromosome/position.
+\item{bpPosMap}{index that specifies which map in the map_table should be used for
+marker chromosome/position.  If it is NULL, the internal variable
+\emph{base_pair_position_index} is used instead.
 \code{showMapNames()} shows the association between map name and map number.}
 
 \item{verbose}{print out statistics on the name/size of each table read and show column headers.

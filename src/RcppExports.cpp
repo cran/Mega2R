@@ -121,6 +121,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getgenotypesdos_1
+Rcpp::List /*Rcpp::IntegerMatrix*/ getgenotypesdos_1(NumericVector locus_arg, NumericVector hocus_arg, List genotype_arg, List allele_arg, NumericVector miscN_arg);
+RcppExport SEXP _Mega2R_getgenotypesdos_1(SEXP locus_argSEXP, SEXP hocus_argSEXP, SEXP genotype_argSEXP, SEXP allele_argSEXP, SEXP miscN_argSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type locus_arg(locus_argSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type hocus_arg(hocus_argSEXP);
+    Rcpp::traits::input_parameter< List >::type genotype_arg(genotype_argSEXP);
+    Rcpp::traits::input_parameter< List >::type allele_arg(allele_argSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type miscN_arg(miscN_argSEXP);
+    rcpp_result_gen = Rcpp::wrap(getgenotypesdos_1(locus_arg, hocus_arg, genotype_arg, allele_arg, miscN_arg));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getgenotypesdos_2
+Rcpp::List /*Rcpp::IntegerMatrix*/ getgenotypesdos_2(NumericVector locus_arg, List genotype_arg, List allele_arg, NumericVector miscN_arg);
+RcppExport SEXP _Mega2R_getgenotypesdos_2(SEXP locus_argSEXP, SEXP genotype_argSEXP, SEXP allele_argSEXP, SEXP miscN_argSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type locus_arg(locus_argSEXP);
+    Rcpp::traits::input_parameter< List >::type genotype_arg(genotype_argSEXP);
+    Rcpp::traits::input_parameter< List >::type allele_arg(allele_argSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type miscN_arg(miscN_argSEXP);
+    rcpp_result_gen = Rcpp::wrap(getgenotypesdos_2(locus_arg, genotype_arg, allele_arg, miscN_arg));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_Mega2R_getgenotypes_1", (DL_FUNC) &_Mega2R_getgenotypes_1, 6},
@@ -131,6 +160,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_Mega2R_getgenotypes_forperson", (DL_FUNC) &_Mega2R_getgenotypes_forperson, 1},
     {"_Mega2R_getgenotypesgenabel_1", (DL_FUNC) &_Mega2R_getgenotypesgenabel_1, 5},
     {"_Mega2R_getgenotypesgenabel_2", (DL_FUNC) &_Mega2R_getgenotypesgenabel_2, 4},
+    {"_Mega2R_getgenotypesdos_1", (DL_FUNC) &_Mega2R_getgenotypesdos_1, 5},
+    {"_Mega2R_getgenotypesdos_2", (DL_FUNC) &_Mega2R_getgenotypesdos_2, 4},
     {NULL, NULL, 0}
 };
 

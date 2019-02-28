@@ -4,7 +4,7 @@
 \alias{init_SKAT}
 \title{load Mega2 SQLite database and perform initialization for SKAT usage}
 \usage{
-init_SKAT(db = NULL, verbose = FALSE, allMarkers = FALSE)
+init_SKAT(db = NULL, verbose = FALSE, allMarkers = FALSE, ...)
 }
 \arguments{
 \item{db}{specifies the path of a \bold{Mega2} SQLite database containing study data.}
@@ -14,6 +14,9 @@ This value is saved in the returned environment.}
 
 \item{allMarkers}{TRUE means use all markers in a given transcript even if there is no
 variation.  FALSE means ignore markers that show no variation; this is the default.}
+
+\item{...}{fed to \emph{dbmega2_import()}; should be bpPosMap= to select from the maps of
+base pairs, if the default is not desired.}
 }
 \value{
 "environment" containing data frames from an SQLite database and some computed values.

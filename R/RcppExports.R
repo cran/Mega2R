@@ -33,3 +33,11 @@ getgenotypesgenabel_2 <- function(locus_arg, genotype_arg, allele_arg, miscN_arg
     .Call('_Mega2R_getgenotypesgenabel_2', PACKAGE = 'Mega2R', locus_arg, genotype_arg, allele_arg, miscN_arg)
 }
 
+getgenotypesdos_1 <- function(locus_arg, hocus_arg, genotype_arg, allele_arg, miscN_arg) {
+    .Call('_Mega2R_getgenotypesdos_1', PACKAGE = 'Mega2R', locus_arg, hocus_arg, genotype_arg, allele_arg, miscN_arg)
+}
+
+getgenotypesdos_2 <- function(locus_arg, genotype_arg, allele_arg, miscN_arg) {
+    .Call('_Mega2R_getgenotypesdos_2', PACKAGE = 'Mega2R', locus_arg, genotype_arg, allele_arg, miscN_arg)
+}
+

@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -31,14 +31,17 @@
 #' load Mega2 SQLite database and perform initialization for pedgene usage
 #'
 #' @description
-#'  This populates the \bold{R} data frames from the specified \bold{Mega2} SQLite database.  It then
-#'  prunes the samples to only include members that have a definite case or control
-#'  status.  Undefined samples are ignored; this is necessary for CRAN \code{pedgene}.
+#'  This populates the \bold{R} data frames from the specified \bold{Mega2} SQLite database.
 #'
 #' @param db specifies the path of a \bold{Mega2} SQLite database containing study data.
 #'
 #' @param verbose TRUE indicates that diagnostic printouts should be enabled.
 #'  This value is saved in the returned environment.
+#'
+#' @param traitname Name of the affection status trait to use to set the case/control status; default value = "default".
+#'
+#' @param ... fed to \emph{dbmega2_import()}; should be bpPosMap= to select from the maps of
+#'  base pairs, if the default is not desired.
 #'
 #' @return "environment" containing data frames from an SQLite database and some computed values.
 #'
@@ -52,21 +55,21 @@
 #'
 #'  It also initializes the dataframe \emph{envir$pedgene_results} to zero rows.
 #'
-#' @seealso \code{\link{DOpedgene}}, \code{\link{Mega2pedgene}}
+#' @seealso \code{\link{DOpedgene}}, \code{\link{Mega2pedgene}}, \code{\link{mkfam}}
 #'
 #' @examples
 #' db = system.file("exdata", "seqsimm.db", package="Mega2R")
-#' ENV = init_pedgene(db)
+#' ENV = init_pedgene(db, traitname = "default")
 #' ls(ENV)
 #'
-init_pedgene = function (db = NULL, verbose = FALSE) {
+init_pedgene = function (db = NULL, verbose = FALSE, traitname = "default", ...) {
 
     if (is.null(db))
         stop("You must specify a database argument!\n", call. = FALSE)
 
-    envir = dbmega2_import(db, verbose = verbose)
+    envir = dbmega2_import(db, verbose = verbose, ...)
 
-    fam = mkfam(envir = envir)
+    fam = mkfam(envir = envir, traitname = traitname)
 #   fam = fam[fam$trait != 0, ]  # b,c vs a
 #   vs
     fam$trantrait = NA
@@ -195,7 +198,7 @@ DOpedgene = function(markers_arg, range_arg, envir = ENV) {
         stop("DOpedgene: range is not defined.", calls. = FALSE)
 
     geno_arg = getgenotypesraw(markers_arg, envir);
-    
+
     markerNames = markers_arg$MarkerName
     gene  = as.character(range_arg[,envir$refCol[4]])
 

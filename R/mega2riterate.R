@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -58,9 +58,9 @@
 #'  are broken loops.  Also, the person_link numbers will be different for all the persons after
 #'  the first loop is broken.
 #'
-#' @param traitname name for trait to use as case/control value; by default, "default"
+#' @param traitname Name of the trait to use as case/control value; by default, "default"
 #'
-#' @param envir an 'environment' that contains all the data frames created from the SQLite database.
+#' @param envir An 'environment' that contains all the data frames created from the SQLite database.
 #'
 #' @export
 #'
@@ -98,35 +98,39 @@
 #' fam
 #'
 mkfam = function (brkloop = FALSE, traitname = "default", envir = ENV) {
-    if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
+  if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
-    if (brkloop) {
-        ped = envir$pedigree_brkloop_table
-        per = envir$person_brkloop_table
-    } else {
-        ped = envir$pedigree_table
-        per = envir$person_table
-    }
-    dofam = function(per) {
-        per$Father=per[match(per$Father, per$ID), "PerPre"]
-        per[is.na(per$Father), "Father"] = 0
-        per$Mother=per[match(per$Mother, per$ID), "PerPre"]
-        per[is.na(per$Mother), "Mother"] = 0
-        per
-    }
-    per=unsplit(lapply(split(per, per$pedigree_link), dofam), per$pedigree_link)
-    perplus = merge(ped[ , c("pedigree_link", "PedPre")],
-                    per[ , c("pedigree_link", "person_link", "PerPre", "Father", "Mother", "Sex")],
-                    by = c("pedigree_link"))
+  if (brkloop) {
+    ped = envir$pedigree_brkloop_table
+    per = envir$person_brkloop_table
+  } else {
+    ped = envir$pedigree_table
+    per = envir$person_table
+  }
+  dofam = function(per) {
+    per$Father=per[match(per$Father, per$ID), "PerPre"]
+    per[is.na(per$Father), "Father"] = 0
+    per$Mother=per[match(per$Mother, per$ID), "PerPre"]
+    per[is.na(per$Mother), "Mother"] = 0
+    per
+  }
+  per=unsplit(lapply(split(per, per$pedigree_link), dofam), per$pedigree_link)
+  perplus = merge(ped[ , c("pedigree_link", "PedPre")],
+                  per[ , c("pedigree_link", "person_link", "PerPre", "Father", "Mother", "Sex")],
+                  by = c("pedigree_link"))
 
 
-    trait = envir$phenotype_table[ , c("person_link", "data")]
+  trait = envir$phenotype_table[ , c("person_link", "data")]
+  if (is.na(traitname)) {
+    trait$trait = NA
+  } else {
     cc = envir$locus_table[envir$locus_table$LocusName == traitname, "locus_link"]
     if (length(cc) == 0) cc = 0
     trait$trait = sapply(trait$data,
-                         function (x) { readBin(x[(8*cc+1):8*(cc+1)], integer(), 2, size = 4) })[1, ]
+                         function (x) { readBin(x[(8*cc+1):(8*(cc+1))], integer(), 2, size = 4) })[1, ]
+  }
 
-    envir$fam = merge(perplus, trait[ , c("person_link", "trait")], by = "person_link")
+  envir$fam = merge(perplus, trait[ , c("person_link", "trait")], by = "person_link")
 }
 
 

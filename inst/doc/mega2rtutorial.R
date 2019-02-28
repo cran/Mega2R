@@ -146,6 +146,39 @@ str(ENV$locus_table)
     # remember our example database is only chr 1
     applyFnToGenes(show, chrs_arg=c(24, 26))
 
+## ----showstat,eval=TRUE--------------------------------------------------
+show.stat = function(m, r, e, fn) {
+      print(r) 
+# collect genotypes for the set of markers "m"
+      mm = getgenotypes(m, envir=e) 
+# apply xxx.test of trait vs marker (accumulating samples)
+      pv = apply(mm, 2, fn)
+      names(pv) = m$MarkerName
+      print(pv)
+}
+
+show2 = function(m, r, e) {
+    f = function(x) {
+          tryCatch(fisher.test(table(e$fam$trait, x)),
+                   error = function(e) {list(p.value = NA)}) $p.value }
+
+    show.stat(m, r, e, f)
+}
+
+show3 = function(m, r, e) {
+    f = function(x) {
+          tryCatch(chisq.test(table(e$fam$trait, x)),
+                   error = function(e) {list(p.value = NA)}) $p.value }
+
+    show.stat(m, r, e, f)
+}
+
+## ----xshow2,eval=TRUE----------------------------------------------------
+    applyFnToGenes(show2, genes_arg = c("CEP104"))
+
+## ----xshow3,eval=TRUE----------------------------------------------------
+    applyFnToGenes(show3, genes_arg = c("CEP104"))
+
 ## ----getgenotypes,eval=TRUE----------------------------------------------
     genotype = getgenotypes(ENV$markers[1:10,])
     dim(genotype)
@@ -226,6 +259,51 @@ Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(
 ## ---- FnToGene2a,eval=TRUE-----------------------------------------------
 print(ENV$SKAT_results)
 
+## ----init_famSKAT,message=FALSE------------------------------------------
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+ENV = init_famSKATRC(db, verbose = F)
+
+## ----init_famSKATb-------------------------------------------------------
+# The special hack below reduces the samples to 20% of the original, so the run will
+# finish in reasonable time. There are 20 different pedigrees.
+setfam(ENV$fam[(ENV$fam$pedigree_link %in% 0:3),], ENV)
+
+ENV$phe = mkphenotype(ENV)
+ENV$phe[ENV$phe == 0] = NA
+
+## ----init_famSKAT2,eval=FALSE--------------------------------------------
+#  # Before issuing the next command, make sure you have issued
+#  # this command `dump_mega2rtutorial_data()` first
+#  # as instructed in the "Tutorial Data' section above.
+#  db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+#  ENV = init_famSKATRC(db, verbose = T)
+
+## ---- FnToRangesfamSKAT,eval=TRUE----------------------------------------
+ENV$verbose = FALSE
+Mega2famSKATRC(pheno=3,gs=1:60)
+
+## ---- FnToRangesfama,eval=TRUE-------------------------------------------
+print(ENV$famSKATRC_results)
+
+## ---- FnToRange2fams,eval=FALSE------------------------------------------
+#  # we will skip this line for the Vignette document production because it takes too long
+#  ENV$verbose = FALSE
+#  Mega2famSKATRc(pheno=3, gs=1:nrow(ENV$refRanges))
+#  print(ENV$famSKATRC_results)
+
+## ----FnToGenesfamSKAT,eval=TRUE------------------------------------------
+ENV$verbose = TRUE
+Mega2famSKATRC(pheno=3, genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
+print(ENV$famSKATRC_results)
+
+## ----FnToGene2fams,eval=FALSE--------------------------------------------
+#  ENV$verbose = FALSE
+#  Mega2famSKATRC(pheno=3, genes = '*', envir = ENV)
+#  print(ENV$famSKATRC_results)
+
 ## ----mega2vcflib---------------------------------------------------------
 # Before issuing the next command, make sure you have issued
 # this command `dump_mega2rtutorial_data()` first
@@ -261,6 +339,44 @@ list.files(vcfdir)
 
 ## ----strseqsimgwaa, eval=FALSE-------------------------------------------
 #  str(seqsimgwaa)
+
+## ----mega2gds------------------------------------------------------------
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+ENV = read.Mega2DB(db)
+
+## ----mega2gdsfx1---------------------------------------------------------
+# NOTE: the gds file to be created must be closed with the function below,
+# or by using an on.exit(closefn.gds(<name>))
+showfile.gds(closeall=T, verbose=F)
+
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
+gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=TRUE)
+
+## ---- mega2gdspr1--------------------------------------------------------
+print(gdsn)
+closefn.gds(gdsn)
+
+## ----mega2gdsfx2,message=FALSE,warning=FALSE-----------------------------
+# NOTE: the gds file to be created must be closed with the function below,
+# or by using an on.exit(closefn.gds(<name>))
+showfile.gds(closeall=T, verbose=F)
+
+## ----mega2gdsfx3,message=FALSE,warning=FALSE-----------------------------
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
+gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=FALSE)
+
+## ---- mega2gdspr2--------------------------------------------------------
+print(gdsn)
+closefn.gds(gdsn)
 
 ## ----srdta, eval=FALSE---------------------------------------------------
 #  GotGenABEL = require("GenABEL", quietly=FALSE)

@@ -731,6 +731,48 @@ Bioconductor database, will match and be processed.
     applyFnToGenes(show, chrs_arg=c(24, 26))
 ```
 
+The example "show" function that we were using does not compute any statistics; it just shows
+the data that are available to analyze.  The two functions below, "show2" and "show3", compute a
+fisher exact test for trait vs marker and a chisq test of the same data.  Hopefully, the code with
+comments is easy to understand.
+
+```{r,showstat,eval=TRUE}
+show.stat = function(m, r, e, fn) {
+      print(r) 
+# collect genotypes for the set of markers "m"
+      mm = getgenotypes(m, envir=e) 
+# apply xxx.test of trait vs marker (accumulating samples)
+      pv = apply(mm, 2, fn)
+      names(pv) = m$MarkerName
+      print(pv)
+}
+
+show2 = function(m, r, e) {
+    f = function(x) {
+          tryCatch(fisher.test(table(e$fam$trait, x)),
+                   error = function(e) {list(p.value = NA)}) $p.value }
+
+    show.stat(m, r, e, f)
+}
+
+show3 = function(m, r, e) {
+    f = function(x) {
+          tryCatch(chisq.test(table(e$fam$trait, x)),
+                   error = function(e) {list(p.value = NA)}) $p.value }
+
+    show.stat(m, r, e, f)
+}
+```
+
+Try running
+```{r,xshow2,eval=TRUE}
+    applyFnToGenes(show2, genes_arg = c("CEP104"))
+```
+or
+```{r,xshow3,eval=TRUE}
+    applyFnToGenes(show3, genes_arg = c("CEP104"))
+```
+
 ## 5.4 Iterating through the Genotypes
 
 The callback functions described above will need the genotype information for the 
@@ -793,8 +835,7 @@ out gene-based association tests on family data looping over selected
 marker subsets.  
 
 The 'pedgene' package implements methods for carrying out gene-based association tests on family data, and is available on CRAN as (https://CRAN.R-project.org/package=pedgene).
-It was written by Daniel Schaid and Jason Sinnwell: 
-[Schaid DJ, McDonnell SK., Sinnwell JP, Thibodeau SN. (2013) Multiple Genetic Variant Association Testing by Collapsing and Kernel Methods With Pedigree or Population Structured Data, Genet Epidemiol, 37(5):409-18.]
+It was written by Daniel Schaid and Jason Sinnwell^[Schaid DJ, McDonnell SK., Sinnwell JP, Thibodeau SN. (2013) Multiple Genetic Variant Association Testing by Collapsing and Kernel Methods With Pedigree or Population Structured Data, Genet Epidemiol, 37(5):409-18.].
 
 ## 6.1 Loading a Mega2 database
 
@@ -979,11 +1020,10 @@ looping over selected marker subsets.
 
 The 'SKAT' package implements methods for carrying out gene-based association tests; 
 it is available on CRAN as (https://CRAN.R-project.org/package=SKAT).
-It was written by Seunggeun Lee and Michael Wu: 
-[Lee, S., Emond, M.J., Bamshad, M.J., Barnes, K.C., Rieder, M.J., Nickerson, D.A., NHLBI GO
+It was written by Seunggeun Lee and Michael Wu^[Lee, S., Emond, M.J., Bamshad, M.J., Barnes, K.C., Rieder, M.J., Nickerson, D.A., NHLBI GO
 Exome Sequencing Project-ESP Lung Project Team, Christiani, D.C., Wurfel, M.M. and Lin, X.
 (2012) Optimal unified approach for rare variant association testing with application to small sample
-case-control whole-exome sequencing studies. American Journal of Human Genetics, 91, 224-237.]
+case-control whole-exome sequencing studies. American Journal of Human Genetics, 91, 224-237.].
 
 ## 7.1 Loading a Mega2 database
 
@@ -1177,7 +1217,213 @@ print(ENV$SKAT_results)
 ```
 
 
-# 8 Outputting Mega2R data to VCF format
+# 8 Using Mega2R to carry out automated gene-based association tests using 'famSKAT_RC'
+
+Mega2R provides functions to run the 'famSKAT_RC' package that carries
+out family-based association kernel tests for both rare and common variants while
+looping over selected marker subsets.  With the appropriate parameter settings adjusting
+the percent of rare variants and the family kinship matrix, 'famSKAT_RC' behaves as SKAT,
+famSKAT and/or SKAT_RC.
+
+The 'famSKATRC' package is available on CRAN as (https://CRAN.R-project.org/package=famSKATRC).
+It was written by Mohamad Saad1 and Ellen M. Wijsman1^[Mohamad Saad1 and Ellen M. Wijsman1,
+Combining family- and population-based imputation data for association analysis of rare and common variants in large pedigrees.
+Genet Epidemiol. 2014 Nov; 38(7): 579–590., doi:  10.1002/gepi.21844].
+
+## 8.1 Loading a Mega2 database
+
+The `init_famSKATRC` function is used to read the Mega2 database and initialize processing.
+This function calls the utility function, `dbmega2_import`, to read a database.
+Then it creates, edits, and rewrites the family data making sure that the
+members are uniquely labeled; it stores the results in the data frame, `fam`. 
+(`fam` contains data merged from the `pedigree_table`, `person_table` and
+`phenotype_table`.)
+Next, `init_famSKATRC` decodes the phenotype_table into a simple data frame, `phe` which
+it stores in the environment;  missing/zero valued entries are set to 'NA'.
+You will definitely want to examine `ENV`$`phe` to choose which phenotype to use
+for analysis.
+Finally, `init_famSKATRC` calculates
+some values that will be used repeatedly and stores them in the environment.
+These data include a kinship matrix calculated from the `fam` family data and
+weighting functions provided for both the rare variant and also for the common variant based on the
+beta distribution.
+
+```{r init_famSKAT,message=FALSE}
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+ENV = init_famSKATRC(db, verbose = F)
+```
+
+The `setfam` function is designed to let you prune the family structure and store it.
+It ensures that all the other original tables that have family member data will be updated.
+`mkphenotype` if it is used (which it is in `init_famSKATRC`), has to be called whenever
+the `fam` table is changed (which happens in `setfam`).
+
+```{r init_famSKATb}
+# The special hack below reduces the samples to 20% of the original, so the run will
+# finish in reasonable time. There are 20 different pedigrees.
+setfam(ENV$fam[(ENV$fam$pedigree_link %in% 0:3),], ENV)
+
+ENV$phe = mkphenotype(ENV)
+ENV$phe[ENV$phe == 0] = NA
+```
+
+You can run the init command with verbose equals TRUE to see the details of the database load and
+to enable later printouts:
+
+```{r init_famSKAT2,eval=FALSE}
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+ENV = init_famSKATRC(db, verbose = T)
+```
+
+## 8.2 Gene Ranges reminder
+
+Mega2R also has an internal default list of the chromosome and base pair
+ranges for many gene transcripts stored in an internal table `refRanges`.
+These transcripts come from
+the UCSC Genome Browser reference assembly GRCH37.  The list was
+further modified to eliminate multiple records from the same gene with
+the exact same transcript start and transcript end.  The list contains
+about 29,000 records.
+
+You may load your own range set instead of the default.
+Create a data frame that contains at least a name "observation", a chromosome
+"observation", a start position "observation" and an end position "observation".
+And create an integer vector that contains the column numbers of the chromosome
+"observation", the start position "observation" and the end position "observation".
+These two become the arguments to the `setRanges` function, viz.
+
+```
+setRanges(Ranges, Columns)
+```
+
+## 8.3 Gene transcripts reminder
+
+Gene transcripts can alternatively be defined according to a Bioconductor database containing
+the boundaries of the gene transcripts.
+The gene transcripts require two Bioconductor Annotations databases to be installed.
+The first line (below) loads the Bioconductor loader and the next
+two lines install two annotation databases. One annotation database provides the gene transcript
+locations and the other maps gene names to entrez gene IDs. (Note: You
+may choose a different transcript database from Bioconductor or
+construct one of your own.) Please type in R:
+
+```
+source("https://bioconductor.org/biocLite.R")
+
+biocLite("TxDb.Hsapiens.UCSC.hg19.knownGene") 
+biocLite("org.Hs.eg.db")
+```
+The above function is roughly the equivalent of the R language `install.packages`; it is run once.
+
+By default, Mega2R uses the databases: "TxDb.Hsapiens.UCSC.hg19.knownGene" and "org.Hs.eg.db";
+you may choose alternates via the command:
+
+```
+setAnnotations(txdb, entrezGene)
+```
+where `txdb` is the name of Bioconductor transcription database, and `entrezGene` is the name of Bioconductor mapping of gene name or gene alias to entrez gene id.  This command may be issued any
+time before the `mega2famSKATRC` command is called.  The defaults were set with:
+
+```
+setAnnotations("TxDb.Hsapiens.UCSC.hg19.knownGene", "org.Hs.eg.db")
+
+```
+
+## 8.4 Running Mega2famSKATRC on ranges
+
+You should be familiar with the famSKAT_RC function of the famSKATRC package and especially
+its many arguments which are more completely explained in the documentation.
+
+The function, `Mega2famSKATRC`, is Mega2R's interface to famSKAT_RC.  Its signature is:
+
+```
+Mega2famSKATRC = function (gs = 1:100, genes = NULL, envir = ENV, ...) { }
+```
+
+The `gs` argument indicates how many default range elements should be processed,
+`genes` if not NULL is a vector of gene names to process (with '*' representing all known genes)
+and the `envir`
+argument specifies the environment that contains all the Mega2R data frames.
+
+Any additional, arguments needed for the "famSKAT_RC" function should be
+provided to the `Mega2famSKATRC` function and they will be passed to the eventual call
+to "famSKAT_RC".  The "famSKAT_RC" function is also called with
+a genotype dosage matrix of the markers.
+
+The Mega2R loop engine iterates through each range and determines the
+set of markers contained.  If there are no markers in a range, the
+genotype matrix is empty and `Mega2famSKATRC` will issue a warning.  If a
+marker shows no variation, `Mega2famSKATRC` will omit it.  The `Mega2famSKATRC`
+function uses an internal function that converts the raw genotype
+value 0x10001, 0x10002 (or 0x20001) and 0x20002 to 0, 1, and 2 with the
+major allele (flipped if necessary to be) 0 and then calls the
+`famSKAT_RC` function with the required arguments.  Finally, the `Mega2famSKATRC`
+callback function stores the results.
+
+By default, the function `Mega2famSKATRC` processes the first 100 transcripts and
+prints the results.
+Note: Set `verbose` to FALSE to eliminate the (excessive) diagnostics.
+A typical invocation of `Mega2famSKATRC` would be:
+
+```{r, FnToRangesfamSKAT,eval=TRUE}
+ENV$verbose = FALSE
+Mega2famSKATRC(pheno=3,gs=1:60)
+```
+
+These data are saved in the data frame, `famSKATRC_results`, in the environment.
+Note: The results are always appended to the data frame.  You should truncate it
+when necessary.  Also, you may want to save these results to a file.
+
+```{r, FnToRangesfama,eval=TRUE}
+print(ENV$famSKATRC_results)
+```
+
+
+```{r, FnToRange2fams,eval=FALSE}
+# we will skip this line for the Vignette document production because it takes too long
+ENV$verbose = FALSE
+Mega2famSKATRc(pheno=3, gs=1:nrow(ENV$refRanges))
+print(ENV$famSKATRC_results)
+```
+
+## 8.5 Running Mega2famSKATRC on genes
+
+Let us run the `Mega2famSKATRC` function for a few genes.  
+Processing time scales with sample size and number of ranges/genes to be processed.
+It is not dependent on the number of markers.
+On an old iMac, this statement below takes 3 minutes per gene for the full 1380 samples.
+But, remember we have reduce the samples to a total of 276 or 20% of the size of the
+samples in the database.
+
+```{r,FnToGenesfamSKAT,eval=TRUE}
+ENV$verbose = TRUE
+Mega2famSKATRC(pheno=3, genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
+print(ENV$famSKATRC_results)
+```
+
+If you are adventurous you can look at all the genes:
+Note: Below, we set verbose to FALSE; otherwise there would be a large number of printouts
+indicating no markers are in many of the ranges.  (Recall the samples come
+from part of chromosome one, whereas the ranges cover the whole genome.)
+
+```{r,FnToGene2fams,eval=FALSE}
+ENV$verbose = FALSE
+Mega2famSKATRC(pheno=3, genes = '*', envir = ENV)
+print(ENV$famSKATRC_results)
+```
+
+Note: The `Mega2famSKATRC` function appends any new results to the end of the
+`ENV$famSKATRC_results` data frame.
+
+
+
+# 9 Outputting Mega2R data to VCF format
 
 The `Mega2VCF` function can output subsets of the Mega2R database as a VCF file, accompanied by
 related files (for phenotype and family data).
@@ -1189,7 +1435,7 @@ was originally defined by the 1000 Genomes Project
 
 The current version of data format can be found at (http://samtools.github.io/hts-specs/).
 
-## 8.1 Writing a VCF File using Mega2R
+## 9.1 Writing a VCF File using Mega2R
 
 First, create the directory "vcfr",
 so we can keep all the generated data in one place.
@@ -1243,7 +1489,7 @@ list.files(vcfdir)
 You can read the code to see how these files are created from the data frames.
 It is worth noting that the internal logic does not create a genotype matrix for all the requested markers at once, but rather works on a block of markers at a time, limiting the amount of memory required. The code also illustrates how to extract the phenotype values from the phenotype raw vectors.
 
-# 9 Converting Mega2R data to GenABEL format
+# 10 Converting Mega2R data to GenABEL format
 
 Mega2R provides support for converting the
 data frames into 'GenABEL' format (e.g. as gwaa.data-class objects) using the functions of GenABEL.
@@ -1255,12 +1501,11 @@ If Mega2R finds GenABEL in your workspace, the functions
 the functions will just return NULL.  (In the example below, we use
 "require" instead of "library" to illustrate this behavior".)
 
-The reference for GenABEL is 
-[Aulchenko Y.S., Ripke S., Isaacs A., van Duijn C.M. GenABEL: an R package for genome-wide association analysis. Bioinformatics. 2007 23(10):1294-6.]
+The reference for GenABEL is ^[Aulchenko Y.S., Ripke S., Isaacs A., van Duijn C.M. GenABEL: an R package for genome-wide association analysis. Bioinformatics. 2007 23(10):1294-6.].
 
 
 
-## 9.1 Creating a GenABEL gwaa.data-class object using Mega2R
+## 10.1 Creating a GenABEL gwaa.data-class object using Mega2R
 
 
 There are several data formats that Mega2 can read and transform
@@ -1268,7 +1513,7 @@ into a database that are not directly accepted by GenABEL. But any
 Mega2 database that can be read into R, can be transformed to GenABEL
 following this example using *seqsimr.db*.
 
-GenABEL (http://www.genabel.org/) can process PLINK .tped/.tfam files with the function
+GenABEL can process PLINK .tped/.tfam files with the function
 `convert.snp.tped` to create a GenABEL "raw" file.
 Then the "raw" file and a generated phenotype
 file can be processed by the function, `load.gwaa.data`, to yield a gwaa.data-class
@@ -1378,14 +1623,161 @@ str(seqsimgwaa)
 ##   .. .. .. .. ..@ .Data: raw [1:345, 1:1000] 59 55 55 55 ...
 ```
 
-# 10 Regression testing
+# 11 Converting Mega2R data to GDS (CoreArray) format
+
+CoreArray Genetic Data Structure (GDS)^[Zheng, Xiuwen, David Levine, Jess Shen, Stephanie M. Gogarten, Cathy Laurie, and Bruce S. Weir. 2012. “A High-Performance Computing Toolset for Relatedness and Principal Component Analysis of Snp Data.” Bioinformatics (Oxford, England) 28 (24):3326–8. https://doi.org/10.1093/bioinformatics/bts606.]
+is a C++ package available from SourceForge^[http://sourceforge.net] as http://corearray.sourceforge.net.
+The Bioconductor^[Gentleman, Robert C., Vincent J. Carey, Douglas M. Bates, Ben Bolstad, Marcel Dettling, Sandrine Dudoit, Byron Ellis, et al. 2004. “Bioconductor: Open Software Development for Computational Biology and Bioinformatics.” Genome Biology 5 (10):1–16. https://doi.org/10.1186/gb-2004-5-10-r80.]
+package 
+`gdsfmt` (http://bioconductor.org/packages/gdsfmt) provides a machine independent 
+R^[R Core Team. 2016. “R: A Language and Environment for Statistical Computing.”]
+language interface to GDS.  `gdsfmt` provides access to the underlying
+named vector hierarchy and named matrix hierarchy.  The Bioconductor package
+SeqArray (http://www.bioconductor.org/packages/SeqArray)
+uses the 
+named CoreArray GDS variables to store (and retrieve) a complete VCF file.  The SeqArray API can be used to apply analysis
+functions to the underlying GWAS data.  In addition, SeqArray data may be converted to a related format
+SNPArray (Note the package is called 
+SNPRelate (http://www.bioconductor.org/packages/SNPRelate).)
+which allows linkage analysis to be performed on the GWAS data.
+
+It is not our intention in this document to explain the CoreArray structure or all the structures that
+are used to represent the VCF GWS data.  The reader is encourage to examine the above references.  If your data
+were available in VCF format, or another format that can be processed to produce a Mega2 database, the following
+section shows how to convert the Mega2 database to either a SNPArray or SeqArray.
+
+Note: Since the packages used here are sourced from Bioconductor, installation is performed by:
+```
+        source("http://bioconductor.org/biocLite.R")
+        biocLite("gdsfmt")
+        biocLite("SeqggggggggggggggArray")
+        biocLite("SNPArray")
+```
+After the installation is performed, you may use the 'library()' function to add the code to your R workspace.
+
+## 11.1 CoreArray features vs Mega2R database features 
+
+There are two important issues that are necessary to understand when converting a Mega2R database to CoreArray
+format.  First, because of the design of CoreArray it is easier (and probably more efficient) to add sucessive new
+columns to the genotype array.  The Mega2R design makes it easy to retrieve complete columns representing samples
+of arbitrary markers.  Thus, the default usage is to create a genotype array that is indexed by sample and then marker.
+This layout is optimal to fetch columns of samples from the array.  However, if there are multiple program that you 
+will use that fetch some markers for selected samples, the genotype array should be organized as markers by samples.
+In this case, it would be best to create the array with the latter organization; there is an option to make this
+choice.
+
+Second, SeqArray is designed to store all the information in any VCF file.  In particular, it can distinguish
+both haplotypes and genotypes markers.  And it can represent biallelic and multi-allelic markers.  Mega2R can
+not handle either of these options. (Actually, Mega2R does fine with multi-alleleic markers but that is not yet
+supported by Mega2gdsfmt.)  Mega2R will always present the heterozygous genotype value as Ref Allele, then
+Alt allele.  The SNPArray format, like Mega2R, does not support haplotypes or multi-alleleic markers.
+
+## 11.2 Creating a GDS file using Mega2R
+
+The Mega2R function, `Mega2gdsfmt()`, creates a '.gds' file from the Mega2R database; it is called as shown below
+```
+    Mega2gdsfmt(filename = "test.gds", markers = NULL, snp.order = FALSE, SeqArray = FALSE, envir = ENV)
+
+The arguments are:
+
+```
+
+- *filename*  - CoreArray (gds) file to create
+
+- *markers*  - data frame of markers to be processed
+
+- *snp.order* - TRUE indicates that the "genotype" data matrix has SNP as the first index
+   (which changes more quickly than subsequent indices).  FALSE indicates that SAMPLE is the
+   the first index.  Default is FALSE.
+
+- *SeqArray* - TRUE uses SeqArray labels for the CoreArray elements.  FALSE uses SNPRelate labels.
+   Default is FALSE.
+
+- *envir* - 'environment' containing SQLite database and other globals.
+
+- *returns* - the "filename" file containing the CoreArray data.  Then returns an internal
+   pointer, class .gds, to the file data.
+
+
+We will illustrate the CoreArray files when they are created.  
+```{r mega2gds}
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
+ENV = read.Mega2DB(db)
+```
+
+Below, we assume that a Mega2 database was stored in
+the environment, `ENV`. If this is not the case, supply the
+named argument, `envir`, wherever `ENV` is used.
+
+### 11.2.1 Creating the GDS file in SeqArray gdsfmt format
+Type:
+
+```{r mega2gdsfx1}
+# NOTE: the gds file to be created must be closed with the function below,
+# or by using an on.exit(closefn.gds(<name>))
+showfile.gds(closeall=T, verbose=F)
+
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
+gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=TRUE)
+```
+
+Note: The line above places the data for only chromosome 1 in the gds file.
+(Recall that our simulated data is only on chromosome 1).
+Note: In general, you can filter the second argument, `ENV$markers`, as needed.
+If the second argument is not present, all the markers are written out.
+
+The created gds file with its variable heirarchy values is listed below:
+```{r, mega2gdspr1}
+print(gdsn)
+closefn.gds(gdsn)
+```
+### 11.2.2 Creating the SNPRelate file in SNPArray gdsfmt format
+Type:
+
+```{r mega2gdsfx2,message=FALSE,warning=FALSE}
+# NOTE: the gds file to be created must be closed with the function below,
+# or by using an on.exit(closefn.gds(<name>))
+showfile.gds(closeall=T, verbose=F)
+```
+
+```{r mega2gdsfx3,message=FALSE,warning=FALSE}
+# Before issuing the next command, make sure you have issued
+# this command `dump_mega2rtutorial_data()` first
+# as instructed in the "Tutorial Data' section above.
+gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
+gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=FALSE)
+```
+
+Note: The line above places the data for only chromosome 1 in the gds file.
+(Recall that our simulated data is only on chromosome 1).
+Note: In general, you can filter the second argument, `ENV$markers`, as needed.
+If the second argument is not present, all the markers are written out.
+
+The generated file and contents are listed below:
+```{r, mega2gdspr2}
+print(gdsn)
+closefn.gds(gdsn)
+```
+
+You can process these files by programs that are designed to read them.  For example, 
+the SNPRelate library has functions that perform: LD-based pruning, PCA, and relatedness
+by IBD.  The SeqArray format file has functions that perform: missing rates for variants,
+missing rates for samples, allele frequencies as well as PCA and inbreeding coefficients.
+
+# 12 Regression testing
 
 To verify that the functions described above have worked correctly,
 we can compare their output files to those created by Mega2, itself, to
 verify that they are identical, as expected. This type of testing is
 known as regression testing.
 
-## 10.1 VCF regression
+## 12.1 VCF regression
 
 If you have a executable copy of Mega2, you can run the code below using
 the MEGA2.BATCH.vcf file and provided example database.
@@ -1554,7 +1946,7 @@ The *diff* should show:
 ## Files vcf/vcf.01.vcf and vcfr/vcf.01.vcf are identical
 ```
 
-## 10.2 GenABEL regression
+## 12.2 GenABEL regression
 
 This test is a bit more complicated.
 We intend to verify that the object generated 
@@ -2045,8 +2437,42 @@ such rearrangement.  Because **gtdata\@coding** and **gtdata\@gtps**
 compare the encoded allele pairs and corresponding encoded genotypes,
 they sometimes differ.
 
+## 12.3 SeqArray regression
 
-# 11 Next steps
+Rather than spell out all the details, this time we will only sketch how to match the 
+SeqArray/SNPArray files calculated by R library APIs and converted from a Mega2R
+database.
+
+First, you will need to find a suitable VCF file.  (As stated earlier, it would be preferable if
+the genotype data were without haplotypes and if the markers were bi-alleleic.)
+Section **11.1**
+explains how to convert a VCF file to a Mega2 database.  Earlier, in Section **10.2/10.2.1**
+and
+**10.2/10.2.2**,
+we showed how to convert the Mega2 database to SeqArray format and SnpArray format, respectively.
+
+Next, the `SeqArray` library contains a function, `seqVCF2SEQ()`, that converts a VCF file to a SeqArray.
+In addition, `SeqArray` contains another function, `seqSEQ2SNP()`, that converts a CoreArray file in SeqArray
+format to SNPArray format.
+
+Our goal is to compare the underlying data calculated in the above two paragraphs.  Let us illustrate with
+the SNPArray data.
+The Mega2R calculation gives you an open `gdsfmt` file descriptor.  If you `print` the descriptor, it will
+show all the CoreArray variables; one of which is 'sample.id'.  The native calculation uses `seqVCF2SEQ()` and 
+then `seqSEQ2SNP()` to produce SNPArray data in a gdsfmt file.
+Open this gdsfmt file
+using `openfn.gds(<file name>)`, and then proceed to print the gds object and look at its variables.  To compare
+both versions of 'sample.id's, use the low level gdsfmt primitives, 'read.gsdn', and 'index.gdsn' as in:
+```
+        all(read.gdsn(index.gdsn(<file name open descriptor>, 'sample.id')) ==
+            read.gdsn(index.gdsn(Mega2Rgdsfmt descriptor>, 'sample.id')) )
+```
+The above test should be applied to all the variables in the gds object hierarchy.
+Further, a similar test can be applied to the
+gds variables of a SeqArray, using the SeqArray variable hierarchy rather than those of the SNPArray.
+
+
+# 13 Next steps
 
 If you are left with questions as to how you can use Mega2R for your own research, you can:
 
@@ -2062,6 +2488,9 @@ document by providing implementation details.
 clean_mega2rtutorial_data()
 ```
 
-# 12 Acknowlegements
+# 14 Acknowlegements
 
 The Mega2 C++ program and this Mega2R R package are both open source and are freely available, along with extensive documentation, from our https://watson.hgen.pitt.edu/register web site. This work was supported by NIH grant R01 GM076667 (PI: Weeks). 
+
+
+# 15 References

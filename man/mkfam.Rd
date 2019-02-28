@@ -13,9 +13,9 @@ different father/mother.  The number of persons per family will be different whe
 are broken loops.  Also, the person_link numbers will be different for all the persons after
 the first loop is broken.}
 
-\item{traitname}{name for trait to use as case/control value; by default, "default"}
+\item{traitname}{Name of the trait to use as case/control value; by default, "default"}
 
-\item{envir}{an 'environment' that contains all the data frames created from the SQLite database.}
+\item{envir}{An 'environment' that contains all the data frames created from the SQLite database.}
 }
 \value{
 data frame

@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -262,12 +262,14 @@ mk_unified_genotype_table = function(envir) {
 #'
 #' @usage
 #' dbmega2_import(dbname,
-#'                bpPosMap = 1,
+#'                bpPosMap = NULL,
 #'                verbose = FALSE)
 #'
 #' @param dbname file path to SQLite database.
 #'
-#' @param bpPosMap index that specifies which map in the map_table should be used for marker chromosome/position.
+#' @param bpPosMap index that specifies which map in the map_table should be used for
+#'  marker chromosome/position.  If it is NULL, the internal variable
+#'  \emph{base_pair_position_index} is used instead.
 #'  \code{showMapNames()} shows the association between map name and map number.
 #'
 #' @param verbose print out statistics on the name/size of each table read and show column headers.
@@ -286,7 +288,7 @@ mk_unified_genotype_table = function(envir) {
 #' ENV = dbmega2_import(db)
 #
 dbmega2_import = function(dbname,
-                          bpPosMap = 1,
+                          bpPosMap = NULL,
                           verbose = FALSE) {
     con = tryCatch(dbConnect(RSQLite::SQLite(), dbname = dbname, flags = SQLITE_RO),
                    error = function(xx) { stop("DB open failed: ", dbname, call. = FALSE) })
@@ -357,6 +359,13 @@ dbmega2_import = function(dbname,
              envir$MARKER_SCHEME, ")", call. = FALSE)
     }
 
+    if (is.null(bpPosMap)) {
+        bpPosMap = envir$int_table[envir$int_table$key == 'base_pair_position_index', 3]
+        if (bpPosMap < 0) {
+            message("NOTE: BAD base pair map; trying map 0 ");
+            bpPosMap = 0
+        }
+    }
     mk_unified_genotype_table(envir)
     mk_markers_with_skip(bpPosMap, envir)
     if (envir$MARKER_SCHEME == 2) {
@@ -545,6 +554,9 @@ resetMega2ENV = function () {
     envir$chr2int[31:60,2] = paste0("chr", envir$chr2int[1:30,2])
 
     envir$positionVsName = FALSE
+
+    envir$dosageRaw = c(0x10001, 0x10002, 0x20001, 0x20002, 0)
+    envir$dosage    = c(      0,       1,       1,       2, 0)
 
     return (envir)
 }
@@ -904,5 +916,153 @@ getgenotypesgenabel = function(markers_arg, envir = ENV) {
                               envir$PhenoCnt)
     }
 }
+
+#' fetch dosage integer matrix for specified markers
+#'
+#' @description
+#'  This function calls a C++ function that does all the heavy lifting.  It passes the arguments
+#'  necessary for the C++ function: some from the caller's arguments and some from data frames
+#'  that are in the "global" environment, \bold{envir}.  From its markers_arg argument, it gets
+#'  the locus_index and the index in the \emph{unified_genotype_table}.
+#'  From the "global" environment, \bold{envir}, it gets a bit vector of compressed genotype information,
+#'  and some bookkeeping related data.
+#'  Note: This function also contains a dispatch/switch on the type of compression in the genotype
+#'  vector.  A different C++ function is called when there is compression versus when there is no
+#'  compression.
+#'
+#' @param markers_arg a data.frame with the following 5 observations:
+#' \describe{
+#' \item{locus_link}{is the ordinal ranking of this marker among all loci}
+#' \item{locus_link_fill}{is the position of corresponding genotype data in the
+#' \emph{unified_genotype_table}}
+#' \item{MarkerName}{is the text name of the marker}
+#' \item{chromosome}{is the integer chromosome number}
+#' \item{position}{is the integer base pair position of marker}
+#'  }
+#'
+#' @param envir an environment that contains all the data frames created from the SQLite database.
+#'
+#' @return a list of 3 values, named "ncol", "zero", "geno".
+#'  \describe{
+#'  \item{geno}{is a matrix of dosages as integers.  The value 0 is given to the Major allele 
+#'  value, 1 is given to the heterozygote value, and 2 is given to the Minor allele.
+#'  In the matrix, there is usually one column for each  marker in the \emph{markers_arg} argument.
+#'  But if there would be only the one allele 0 or 2 in the column, the column is ignorednot present.
+#'  There is one row for each person in the family (\emph{fam}) table.}
+#'  \item{ncol}{Is the count of the actual number of columns in the geno matrix.}
+#'  \item{zero}{Is a vector with one entry per marker.  The value will be 0 if the marker is
+#'  not in the geno matrix.  Otherwise the value is the column number in the geno matrix where
+#'  the marker data appears.}}
+#'
+#' @export
+#' @useDynLib Mega2R
+#'
+#' @details
+#'  The \emph{unified_genotype_table} contains one raw vector for each person.  In the vector,
+#'  there are two bits for each genotype.  This function creates an output matrix by fixing
+#'  the marker and collecting genotype information for each person and then repeating for
+#'  all the specified markers.
+#'
+#' @examples
+#' db = system.file("exdata", "seqsimm.db", package="Mega2R")
+#' ENV = read.Mega2DB(db)
+#'
+#' getgenotypesdos(ENV$markers[ENV$markers$chromosome == 1,])
+#'
+getgenotypesdos = function(markers_arg, envir = ENV) {
+    if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
+
+  return
+    if (envir$MARKER_SCHEME == 1) {
+        getgenotypesdos_1(markers_arg$locus_link, markers_arg$locus_link_fill,
+                          envir$unified_genotype_table, envir$allele_table,
+                          envir$PhenoCnt)
+    } else {  # must be == 2
+        getgenotypesdos_2(markers_arg$locus_link,
+                          envir$unified_genotype_table, envir$locus_allele_table,
+                          envir$PhenoCnt)
+    }
+}
+
+#' computeDosage function
+#'
+#' @description
+#'  Convert the genotypesraw() allele patterns of 0x10001, 0x10002 (or 0x20001), 0x20002, 0
+#"  from the genotype matrix
+#'  to the numbers 0, 1, 2, 9 for each marker. (Reverse, the order iff allele "1" has the
+#'  minor allele frequency.)  
+#'
+#' @param markers_arg a data.frame with the following 5 observations:
+#' \describe{
+#' \item{locus_link}{is the ordinal ranking of this marker among all loci}
+#' \item{locus_link_fill}{is the position of corresponding genotype data in the
+#' \emph{unified_genotype_table}}
+#' \item{MarkerName}{is the text name of the marker}
+#' \item{chromosome}{is the integer chromosome number}
+#' \item{position}{is the integer base pair position of marker}
+#' }
+#'
+#' @param range_arg one row of a ranges_arg.  The latter is a data frame of at least three
+#'  integer columns.  The columns indicate a range:
+#'  a chromosome number, a start base pair value, and an end base pair value.
+#'
+#' @param envir 'environment' containing SQLite database and other globals especially the
+#'  phenotype_table, \code{phe}.
+#'
+#' @return a matrix of samples X markers for all the markers that have nonzero changes.
+#'
+#' @export
+#'
+#' @seealso \code{\link{DOfamSKATRC}}
+#'
+#' @examples
+#' db = system.file("exdata", "seqsimm.db", package="Mega2R")
+#' ENV = init_famSKATRC(db, verbose = TRUE)
+#' dimDosage = function(m, r, e) {print(dim(computeDosage(m, r, e)))}
+#' applyFnToRanges(dimDosage, ENV$refRanges[50:60, ], ENV$refIndices, envir=ENV)
+#' # This will use return dosage matrices for the markers in the ranges 50 - 60,
+#' # but is basically ignores the results.
+#'
+#
+computeDosage = function (markers_arg, range_arg, envir) {
+
+#   tim0 = system.time ({
+
+    geno_arg = getgenotypesraw(markers_arg, envir);
+
+    markerNames = markers_arg$MarkerName
+    gene  = as.character(range_arg[,envir$refCol[4]])
+    
+    di = dim(geno_arg)
+    geno = matrix(0, nrow = (di[1]), ncol = di[2])
+    kk = 0
+    for (k in 1:(di[2])) {
+        vec = envir$dosage[match(as.integer(geno_arg[ , k]), envir$dosageRaw)]
+        g0 = sum(vec == 0)
+        g1 = sum(vec == 1)
+        g2 = sum(vec == 2)
+        if (envir$verbose)
+            cat(gene, markerNames[k], g0, g1, g2, "\n")
+
+        if (g0 == di[1] || g1 == di[1] || g2 == di[1])
+            next
+
+        if (g0 < g2) {
+           kk = kk + 1
+           geno[ , kk] = 2 - vec
+        } else {
+           kk = kk + 1
+           geno[ , kk] =     vec
+        }
+    }
+
+    if (kk < di[2])
+        geno = geno[,1:kk]
+
+#   })
+
+    geno
+}
+
 
 Rcpp::sourceCpp("src/getgenotypes.cpp")

@@ -1,7 +1,7 @@
 
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
@@ -43,6 +43,9 @@
 #' @param allMarkers TRUE means use all markers in a given transcript even if there is no
 #'  variation.  FALSE means ignore markers that show no variation; this is the default.
 #'
+#' @param ... fed to \emph{dbmega2_import()}; should be bpPosMap= to select from the maps of
+#'  base pairs, if the default is not desired.
+#'
 #' @return "environment" containing data frames from an SQLite database and some computed values.
 #'
 #' @export
@@ -61,19 +64,20 @@
 #' ENV = init_SKAT(db, verbose = FALSE, allMarkers = FALSE)
 #' ls(ENV)
 #'
-init_SKAT = function (db = NULL, verbose = FALSE, allMarkers = FALSE) {
-
+init_SKAT = function (db = NULL, verbose = FALSE, allMarkers = FALSE, ...) {
+##browser()
     if (is.null(db))
         stop("You must specify a database argument!\n", call. = FALSE)
 
-    envir = dbmega2_import(db, verbose = verbose)
+    envir = dbmega2_import(db, verbose = verbose, ...)
 
     fam = mkfam(envir = envir)
+##-
     fam = fam[fam$trait != 0, ]
     setfam(fam, envir = envir)  # also updates unified_genotype_table
 
     envir$phe  = mkphenotype(envir)
-
+##+ envir$phe[envir$phe == 0] = NA
     envir$SKAT_results = data.frame(chr = character(0), gene = character(0),
                                      nvariants = numeric(0), start = integer(0), end = integer(0),
                                      skat = numeric(0),

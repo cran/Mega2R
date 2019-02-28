@@ -1,7 +1,7 @@
 /*
   Mega2R: Mega2 for R.
 
-  Copyright 2017-2018, University of Pittsburgh. All Rights Reserved.
+  Copyright 2017-2019, University of Pittsburgh. All Rights Reserved.
 
   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 
@@ -743,6 +743,224 @@ Rcpp::RawMatrix getgenotypesgenabel_2(NumericVector locus_arg,
     return mtx;
 }
 
+
+// [[Rcpp::export]]
+Rcpp::List
+/*Rcpp::IntegerMatrix*/ getgenotypesdos_1(NumericVector locus_arg,
+                                      NumericVector hocus_arg,
+                                      List          genotype_arg,
+                                      List          allele_arg,
+                                      NumericVector miscN_arg)
+{
+   int debug = 0;
+
+    Rcpp::NumericVector loci(locus_arg);
+    int locus_size = loci.size();
+    Rcpp::NumericVector hoci(hocus_arg);
+    int hocus_size = hoci.size();
+
+    Rcpp::List genotype(genotype_arg);
+    Rcpp::List genotype_sample(genotype[1]);           // geno[, 2]
+    int genotype_sample_size = genotype_sample.size();
+
+    Rcpp::List allele(allele_arg);
+    std::vector<int> decode_allele(4);
+
+    Rcpp::NumericVector miscns(miscN_arg);
+    int pheno = miscns[0];
+
+    Rcpp::IntegerMatrix mtx(genotype_sample_size, locus_size);
+
+    Rcpp::IntegerVector zero(locus_size);
+
+    if (locus_size != hocus_size) {
+        Rf_error("First vector arguments should be the same length, but are %d vs %d\\n",
+                   locus_size, hocus_size);
+//      return mtx;
+        return Rcpp::List::create(Rcpp::Named("ncol") = 0,
+                                  Rcpp::Named("zero") = zero,
+                                  Rcpp::Named("geno") = mtx);
+    }
+
+    int locus, hocus, marker, byte, a1map, a2map, t0, nx, sum[4], ii = 0;
+    for (int i = 0; i < locus_size; i++) {
+        locus = loci[i];
+        hocus = hoci[i];
+        marker = hocus - pheno;
+
+        byte = marker / 4;
+        marker = marker - 4 * byte;
+
+        if (debug) Rprintf("locus %d, hocus %d, pheno: %d, marker: %d, byte %d, offset %d\\n",
+                           locus, hocus, pheno, hocus-pheno, byte, marker);
+
+        a1map = 1;
+        a2map = 2;
+//
+// allele_table is a single data.frame
+        Rcpp::IntegerVector aAllele(allele[3]);
+        int allele1 = (aAllele[2 * locus + a1map - 1]);
+        int allele2 = (aAllele[2 * locus + a2map - 1]);
+        Rcpp::IntegerVector aindexX(allele[3]);
+        if (debug) Rprintf("indexX: %d %d\\n", aindexX[2 * locus], aindexX[2 * locus+1]);
+        if (debug) Rprintf("allele%d/%d: %d%d; ", a1map, a2map,
+                              allele1, allele2);
+
+        decode_allele[0] = 0;
+        decode_allele[1] = 0;
+        decode_allele[2] = 1;
+        decode_allele[3] = 2;
+        sum[0] = sum[1] = sum[2] = sum[3] = 0;
+
+        for (int j = 0; j < genotype_sample_size; j++) {
+// Rprintf("J %d %d\n", j, Rf_isNull(genotype_sample[j]));
+
+            if (Rf_isNull(genotype_sample[j])) {
+                t0 = 0x55;
+            } else {
+                Rcpp::RawVector rv(genotype_sample[j]);
+                t0 = (rv.size() != 0) ? rv[byte]: 0x55;
+            }
+/*
+            if (debug && j <= 3)
+                Rprintf("byte %d, t0 %x %x %x %x %x %x %x %x %x %x %x %x %x\\n",
+                         byte, t0,
+                         rv(byte-6), rv(byte-5), rv(byte-4), rv(byte-3), rv(byte-2), rv(byte-1),
+                         rv(byte-0), rv(byte+1), rv(byte+2), rv(byte+3), rv(byte+4), rv(byte+5));
+*/
+            if (debug && j <= 3) Rprintf("byte %d, t0 %x \\n",  byte, t0);
+            if (marker == 0) {
+                nx = decode_allele[(t0 & 0x03) >> 0];
+                mtx(j, ii) = nx;
+                sum[nx]++;
+            } else if (marker == 1) {
+                nx = decode_allele[(t0 & 0x0c) >> 2];
+                mtx(j, ii) = nx;
+                sum[nx]++;
+            } else if (marker == 2) {
+                nx = decode_allele[(t0 & 0x30) >> 4];
+                mtx(j, ii) = nx;
+                sum[nx]++;
+            } else if (marker == 3) {
+                nx = decode_allele[(t0 & 0xc0) >> 6];
+                mtx(j, ii) = nx;
+                sum[nx]++;
+            }
+        }
+
+        zero[i] = 0;
+        if ((sum[0] == genotype_sample_size) || (sum[1] == genotype_sample_size) ||
+            (sum[2] == genotype_sample_size))
+            continue;
+        zero[i] = ii+1;
+
+        if (sum[0] < sum[2]) {
+            for (int j = 0; j < genotype_sample_size; j++) {
+                mtx(j, ii) = 2 - mtx(j, ii);
+            }
+        }
+        ii++;
+    }
+//  return mtx;
+    return Rcpp::List::create(Rcpp::Named("ncol") = ii,
+                              Rcpp::Named("zero") = zero,
+                              Rcpp::Named("geno") = mtx);
+}
+
+// [[Rcpp::export]]
+Rcpp::List
+/*Rcpp::IntegerMatrix*/ getgenotypesdos_2(NumericVector locus_arg,
+                                      List          genotype_arg,
+                                      List          allele_arg,
+                                      NumericVector miscN_arg)
+{
+    int debug = 0;
+
+    Rcpp::NumericVector loci(locus_arg);
+    int locus_size = loci.size();
+
+    Rcpp::List genotype(genotype_arg);
+    Rcpp::List genotype_sample(genotype[1]);           // geno[, 2]
+    int genotype_sample_size = genotype_sample.size();
+
+    Rcpp::List allele(allele_arg);
+    std::vector<int> decode_allele(4);
+
+    Rcpp::NumericVector miscns(miscN_arg);
+    int pheno = miscns[0];
+
+    Rcpp::IntegerMatrix mtx(genotype_sample_size, locus_size);
+
+    Rcpp::IntegerVector zero(locus_size);
+
+    int locus, marker, sum[4], ii = 0;
+    for (int i = 0; i < locus_size; i++) {
+        locus = loci[i];
+        marker = locus - pheno;
+
+        if (debug) Rprintf("locus %d, pheno: %d, marker: %d\\n",
+                           locus, pheno, marker);
+
+        Rcpp::List alleleList(allele[locus]);
+        Rcpp::CharacterVector aAlleleIndex(alleleList[3]);
+        int allele1, allele2;
+        sum[0] = sum[1] = sum[2] = sum[3] = 0;
+
+        for (int j = 0; j < genotype_sample_size; j++) {
+
+            if (Rf_isNull(genotype_sample[j])) {
+                allele1 = allele2 = 0;  // indicate empty
+            } else {
+                Rcpp::RawVector rv(genotype_sample[j]);
+                if (rv.size() != 0) {
+                    allele1 = rv[2 * marker];
+                    allele2 = rv[2 * marker + 1];
+                } else
+                    allele1 = allele2 = 0;  // indicate empty
+            }
+/*
+            if (debug && j <= 3)
+                Rprintf("marker %d, t0 %x t1 %x %x %x %x %x %x %x %x %x %x %x %x %x\\n",
+                         marker, allele1, allele2,
+                         rv(marker-6), rv(marker-5), rv(marker-4), rv(marker-3), rv(marker-2), rv(marker-1),
+                         rv(marker-0), rv(marker+1), rv(marker+2), rv(marker+3), rv(marker+4), rv(marker+5));
+*/
+            if (debug && j <= 3) Rprintf("marker %d, allele1 %x, allele2 %x \\n",  marker, allele1, allele2);
+
+//          index1 = aAlleleIndex[ allele1 - 1 ];
+//          index2 = aAlleleIndex[ allele2 - 1 ];
+
+            if (allele1 == allele2) {
+                if (allele1 == 0 || allele1 == 1) {
+                    mtx(j, ii) = 0;
+                    sum[0]++;
+                } else {
+                    mtx(j, ii) = 2;
+                    sum[2]++;
+                }
+            } else {
+                mtx(j, ii) = 1;
+                sum[1]++;
+            }
+        }
+
+        zero[i] = 0;
+        if ((sum[0] == genotype_sample_size) || (sum[2] == genotype_sample_size))
+            continue;
+        zero[i] = ii+1;
+
+        if (sum[0] < sum[2]) {
+            for (int j = 0; j < genotype_sample_size; j++) {
+                mtx(j, ii) = 2 - mtx(j, ii);
+            }
+        }
+        ii++;
+    }
+//  return mtx;
+    return Rcpp::List::create(Rcpp::Named("ncol") = ii,
+                              Rcpp::Named("zero") = zero,
+                              Rcpp::Named("geno") = mtx);
+}
 
 //////////////////////////////////////////////
 // library(inline)                          //

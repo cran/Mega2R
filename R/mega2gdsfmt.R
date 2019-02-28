@@ -1,6 +1,6 @@
 #   Mega2R: Mega2 for R.
 #
-#   Copyright 2018, University of Pittsburgh. All Rights Reserved.
+#   Copyright 2018-2019, University of Pittsburgh. All Rights Reserved.
 #
 #   Contributors to Mega2R: Robert V. Baron and Daniel E. Weeks.
 #
