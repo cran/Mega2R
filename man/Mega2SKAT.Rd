@@ -4,8 +4,7 @@
 \alias{Mega2SKAT}
 \title{execute the CRAN SKAT function on a subset of the gene transcripts}
 \usage{
-Mega2SKAT(f, ty, gs = 1:100, genes = NULL, skat = SKAT::SKAT,
-  envir = ENV, ...)
+Mega2SKAT(f, ty, gs = 1:100, genes = NULL, skat = SKAT::SKAT, envir = ENV, ...)
 }
 \arguments{
 \item{f}{SKAT_Null_Model formula.  If this is non NULL, envir$obj is initialized by calling

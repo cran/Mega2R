@@ -80,7 +80,7 @@ init_pedgene = function (db = NULL, verbose = FALSE, traitname = "default", ...)
     setfam(fam, envir = envir)  # also updates unified_genotype_table
 
     envir$schaidPed = envir$fam[ , c(-1, -2)]
-    colnames(envir$schaidPed) = c("ped", "person", "father", "mother", "sex", "trait")
+    colnames(envir$schaidPed) = c("famid", "person", "father", "mother", "sex", "trait")
     envir$pedPer = envir$schaidPed[ , 1:2]
 #   envir$mt = matrix(c(11, 12, 21, 22, 0,    0, 1, 1, 2, 0), nrow = 5, ncol = 2)
     envir$mt1 = c(0x10001, 0x10002, 0x20001, 0x20002, 0)

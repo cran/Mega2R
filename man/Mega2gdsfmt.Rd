@@ -4,8 +4,13 @@
 \alias{Mega2gdsfmt}
 \title{transcode mega2 to gdsfmt/SNP_ARRAY}
 \usage{
-Mega2gdsfmt(filename = "test.gds", markers = NULL, snp.order = FALSE,
-  SeqArray = FALSE, envir = ENV)
+Mega2gdsfmt(
+  filename = "test.gds",
+  markers = NULL,
+  snp.order = FALSE,
+  SeqArray = FALSE,
+  envir = ENV
+)
 }
 \arguments{
 \item{filename}{gdsfmt file to create}

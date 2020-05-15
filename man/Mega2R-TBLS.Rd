@@ -5,7 +5,9 @@
 \alias{Mega2R-TBLS}
 \alias{TBLS}
 \title{Mega2R SQLite3 tables}
-\format{An object of class \code{character} of length 15.}
+\format{
+An object of class \code{character} of length 15.
+}
 \usage{
 TBLS
 }

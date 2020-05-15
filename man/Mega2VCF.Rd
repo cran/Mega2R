@@ -4,8 +4,13 @@
 \alias{Mega2VCF}
 \title{generate a VCF file set for a collection of markers}
 \usage{
-Mega2VCF(prefix, markers = NULL, mapno = 0, alleleOrder = "default",
-  envir = ENV)
+Mega2VCF(
+  prefix,
+  markers = NULL,
+  mapno = 0,
+  alleleOrder = "default",
+  envir = ENV
+)
 }
 \arguments{
 \item{prefix}{prefix of output files including the VCF file (see Description section above). This prefix can include a path.}

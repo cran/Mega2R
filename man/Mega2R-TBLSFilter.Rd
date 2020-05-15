@@ -5,7 +5,9 @@
 \alias{Mega2R-TBLSFilter}
 \alias{TBLSFilter}
 \title{Mega2R SQLite3 table filter}
-\format{An object of class \code{list} of length 7.}
+\format{
+An object of class \code{list} of length 7.
+}
 \usage{
 TBLSFilter
 }

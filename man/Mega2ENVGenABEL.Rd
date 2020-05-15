@@ -4,8 +4,13 @@
 \alias{Mega2ENVGenABEL}
 \title{generate gwaa.data-class object}
 \usage{
-Mega2ENVGenABEL(markers = NULL, force = TRUE, makemap = FALSE,
-  sort = TRUE, envir = ENV)
+Mega2ENVGenABEL(
+  markers = NULL,
+  force = TRUE,
+  makemap = FALSE,
+  sort = TRUE,
+  envir = ENV
+)
 }
 \arguments{
 \item{markers}{data frame of markers to be processed}

@@ -661,7 +661,7 @@ Rcpp::RawMatrix getgenotypesgenabel_2(NumericVector locus_arg,
     Rcpp::DoubleVector freq(locus_size);
 
     int locus, marker;
-    int a, b, k = 0;
+    int a = 0, b = 0, k = 0;
     for (int i = 0; i < locus_size; i++) {
         k = 0;
         locus = loci[i];

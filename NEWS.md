@@ -1,3 +1,7 @@
+# Version 1.0.6 (2020-05-12)
+
+-- Mega2pedgene updated to work with updated version of pedgene.
+
 # Version 1.0.5 (2019-02-27)
 
 -- Bug fix: The 'mkfam' function now correctly extracts the case/control trait when the database contains more than one phenotype.  It worked correctly previously in our simple example data set where there was only one phenotype in the Mega2 database.

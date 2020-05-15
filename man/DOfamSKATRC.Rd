@@ -4,10 +4,20 @@
 \alias{DOfamSKATRC}
 \title{DofamSKATRC call back function}
 \usage{
-DOfamSKATRC(markers_arg, range_arg, envir, pheno = 3, id = NULL,
-  covariates = NULL, sqrtweights_c = NULL, sqrtweights_r = NULL,
-  binomialimpute = TRUE, acc = 1e-06, maf = 0.05, phi = c(0, 0.2, 0.5,
-  0.9))
+DOfamSKATRC(
+  markers_arg,
+  range_arg,
+  envir,
+  pheno = 3,
+  id = NULL,
+  covariates = NULL,
+  sqrtweights_c = NULL,
+  sqrtweights_r = NULL,
+  binomialimpute = TRUE,
+  acc = 1e-06,
+  maf = 0.05,
+  phi = c(0, 0.2, 0.5, 0.9)
+)
 }
 \arguments{
 \item{markers_arg}{a data.frame with the following 5 observations:

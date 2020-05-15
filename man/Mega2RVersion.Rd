@@ -4,7 +4,9 @@
 \name{Mega2RVersion}
 \alias{Mega2RVersion}
 \title{Mega2R version}
-\format{An object of class \code{character} of length 1.}
+\format{
+An object of class \code{character} of length 1.
+}
 \usage{
 Mega2RVersion
 }

@@ -3,7 +3,6 @@
 \docType{package}
 \name{Mega2R}
 \alias{Mega2R}
-\alias{Mega2R-package}
 \title{Mega2R package}
 \description{
 This package reads a Mega2 SQLite3 database into data frames and
