@@ -43,7 +43,7 @@ are represented by NA.}
 \item{id}{a vector of individuals to be included in the test, a subset of the family members.
 If NULL is given, all members will be used.}
 
-\item{covariates}{a matrix of covariated for the phenotype.}
+\item{covariates}{a matrix of covariates for the phenotype.}
 
 \item{sqrtweights_c}{weight function for common variants, if NULL use weight set in init_famSKAT}
 

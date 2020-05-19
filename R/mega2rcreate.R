@@ -46,7 +46,7 @@ NULL
 #' @author Robert V Baron
 #' @docType data
 #' @name Mega2RVersion
-Mega2RVersion = '5.0.0'
+Mega2RVersion = '6.0.0'
 
 #
 # how to load refRanges & refIndices to sysdata

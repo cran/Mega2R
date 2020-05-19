@@ -1,3 +1,7 @@
+# Version 1.0.7 (2020-05-19
+
+-- Updated 'Mega2RVersion' so that Mega2R will read databases produced by the current version of Mega2R.
+
 # Version 1.0.6 (2020-05-12)
 
 -- Mega2pedgene updated to work with updated version of pedgene.

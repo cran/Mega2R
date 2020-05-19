@@ -107,7 +107,7 @@ init_famSKATRC = function (db = NULL, verbose = FALSE, ALPHA = FALSE, ...) {
 #' @description
 #' If the \emph{gene} argument is NULL, execute the famSKAT_RC function on the first \emph{gs}
 #'  gene transcripts (default is gs = 1:100).
-#'  Update the \emph{envir$famSKATRC_results} data frame with the results.  
+#'  Update the \emph{envir$famSKATRC_results} data frame with the results.
 #'  Otherwise, \emph{gene} is a string vector of genes to process.  The special value '*' stands
 #'  for all the known genes.
 #'
@@ -202,7 +202,7 @@ Mega2famSKATRC = function (gs = 1:100, genes=NULL, envir = ENV, ...) {
 #' @param pheno is an index into the phenotypes_table to select the phenotype.  Missing phenotypes
 #'  are represented by NA.
 #'
-#' @param covariates a matrix of covariated for the phenotype.
+#' @param covariates a matrix of covariates for the phenotype.
 #'
 #' @param id a vector of individuals to be included in the test, a subset of the family members.
 #'  If NULL is given, all members will be used.
@@ -302,7 +302,7 @@ DOfamSKATRC = function(markers_arg, range_arg, envir,
     }
     if (is.null(sqrtweights_c)) sqrtweights_c = envir$wuweights_c
     if (is.null(sqrtweights_r)) sqrtweights_r = envir$wuweights_r
-    argn = list(PHENO=envir$phe[,pheno], genotypes=geno, id=id, fullkins=envir$KIN, 
+    argn = list(PHENO=envir$phe[,pheno], genotypes=geno, id=id, fullkins=envir$KIN,
                covariates=covariates, sqrtweights_c=sqrtweights_c, sqrtweights_r=sqrtweights_r,
                binomialimpute=binomialimpute, acc=acc, maf=maf, phi=phi)
 
@@ -312,7 +312,7 @@ DOfamSKATRC = function(markers_arg, range_arg, envir,
 
     if (envir$ALPHA) {
 ##
-        argn = list(PHENO=envir$phe[,pheno], genotypes=geno, id=idL, fullkins=envir$KINL, 
+        argn = list(PHENO=envir$phe[,pheno], genotypes=geno, id=idL, fullkins=envir$KINL,
                    covariates=covariates, sqrtweights_c=sqrtweights_c, sqrtweights_r=sqrtweights_r,
                    binomialimpute=binomialimpute, acc=acc, maf=maf, phi=phi)
 
@@ -326,7 +326,7 @@ DOfamSKATRC = function(markers_arg, range_arg, envir,
     } else
         result = c(list(), chr=chr, gene=gene, nvariants=nsnps, start=start, end=end,
                    tim[1:3], famSKATRC=skat)
-  
+
     lastp1 = nrow(envir$famSKATRC_results) + 1
     if (lastp1 == 1) {
         envir$famSKATRC_results = do.call(data.frame, c(result, stringsAsFactors = FALSE))

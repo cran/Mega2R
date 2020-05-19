@@ -26,7 +26,7 @@ The data frame with the results is stored in the environment and named \emph{fam
 \description{
 If the \emph{gene} argument is NULL, execute the famSKAT_RC function on the first \emph{gs}
  gene transcripts (default is gs = 1:100).
- Update the \emph{envir$famSKATRC_results} data frame with the results.  
+ Update the \emph{envir$famSKATRC_results} data frame with the results.
  Otherwise, \emph{gene} is a string vector of genes to process.  The special value '*' stands
  for all the known genes.
 }

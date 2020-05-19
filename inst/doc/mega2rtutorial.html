@@ -300,7 +300,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Mega2R Tutorial</h1>
 <h4 class="author">Robert V. Baron and Daniel E. Weeks</h4>
-<h4 class="date">May 12, 2020, 21:47</h4>
+<h4 class="date">May 19, 2020, 11:01</h4>
 
 
 
@@ -568,7 +568,7 @@ Default_Outfile_Names=yes</p>
 <pre><code>## int_table    35  3   
 ## int_table    pId key value   
 ## 
-## charstar_table   5   3   
+## charstar_table   9   3   
 ## charstar_table   pId key value   
 ## 
 ## pedigree_table   20  8   
@@ -660,7 +660,7 @@ Default_Outfile_Names=yes</p>
 ##                        rows cols
 ## affectclass_table         1    9
 ## allele_table           2002    5
-## charstar_table            5    3
+## charstar_table            9    3
 ## int_table                35    3
 ## locus_table            1001    5
 ## map_table              2000    6
@@ -1262,7 +1262,7 @@ biocLite(&quot;org.Hs.eg.db&quot;)</code></pre>
 <p>These data are saved in the data frame, <code>SKAT_results</code>, in the environment. Note: The results are always appended to the data frame. You should truncate it when necessary.</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="kw">print</span>(ENV<span class="op">$</span>SKAT_results)</a></code></pre></div>
 <pre><code>##   chr   gene nvariants   start     end      skat
-## 1   1 CEP104         8 3728644 3773797 0.4839804</code></pre>
+## 1   1 CEP104         8 3728644 3773797 0.4968229</code></pre>
 <div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="co"># we will skip this line for the Vignette document production because it takes</span></a>
 <a class="sourceLine" id="cb116-2" data-line-number="2"><span class="co"># too long</span></a>
 <a class="sourceLine" id="cb116-3" data-line-number="3">ENV<span class="op">$</span>verbose =<span class="st"> </span><span class="ot">FALSE</span></a>
@@ -1282,10 +1282,10 @@ biocLite(&quot;org.Hs.eg.db&quot;)</code></pre>
 <pre><code>## 'select()' returned 1:many mapping between keys and columns</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1"><span class="kw">print</span>(ENV<span class="op">$</span>SKAT_results)</a></code></pre></div>
 <pre><code>##   chr   gene nvariants     start       end         skat
-## 1   1    AK5         4  77747662  78025654 0.0618841143
-## 2   1   ST7L         2 113066141 113153625 0.0260057711
-## 3   1 KIF26B         8 245318287 245809683 0.0095135882
-## 4   1  DISP1         4 222988431 223179337 0.0006699864</code></pre>
+## 1   1    AK5         4  77747662  78025654 0.0620261468
+## 2   1   ST7L         2 113066141 113153625 0.0272631425
+## 3   1 KIF26B         8 245318287 245809683 0.0096026126
+## 4   1  DISP1         4 222988431 223179337 0.0009251373</code></pre>
 <p>Note: we set verbose to FALSE otherwise there will be a large number of print outs indicating no markers are in the range. (Recall the samples come from part of chromosome one, whereas the ranges cover the whole genome.) If you are adventurous you can look at all the transcripts:</p>
 <div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1">ENV<span class="op">$</span>verbose =<span class="st"> </span><span class="ot">FALSE</span></a>
 <a class="sourceLine" id="cb123-2" data-line-number="2">ENV<span class="op">$</span>SKAT_results =<span class="st"> </span>ENV<span class="op">$</span>SKAT_results[<span class="dv">0</span>, ]</a>
@@ -1297,55 +1297,55 @@ biocLite(&quot;org.Hs.eg.db&quot;)</code></pre>
 <p>Note: The default behavior of <code>Mega2SKAT</code> is to append any new results to the end of the <code>ENV$SKAT_results</code> data frame.</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="kw">print</span>(ENV<span class="op">$</span>SKAT_results)</a></code></pre></div>
 <pre><code>##    chr      gene nvariants     start       end         skat
-## 1    1   DDX11L1         8     11874     14409 0.0847889732
-## 2    1    NBPF20         4 144151519 144830407 0.1575014922
-## 3    1 GNG12-AS1         4  68297971  68668670 1.0000000000
-## 4    1  MIR548F1         4 186029867 186446655 0.7294929185
-## 5    1     TESK2         4  45809555  45923543 0.4555341379
-## 6    1   SDCCAG8         8 243449574 243663393 0.7403615891
-## 7    1     WDR63         8  85527993  85598821 1.0000000000
-## 8    1       CR1        12 207669473 207783033 0.7994652525
-## 9    1     GLIS1         4  53971906  54199877 0.4663862116
-## 10   1      DAB1         4  57463579  58716211 0.4624562765
-## 11   1       DPT         4 168664695 168698442 0.1570360061
-## 12   1       AK4         4  65613850  65697828 0.2774821808
-## 13   1     EPRS1         8 220160484 220220000 0.9798795986
-## 14   1     NTNG1         4 107682629 108024475 0.2681644460
-## 15   1      ATF6        20 161736034 161835745 0.9186011285
-## 16   1    SRGAP2         8 206557369 206628046 0.0910881896
-## 17   1       AK5         4  77747662  78025654 0.0619633013
-## 18   1    BRINP3         4 190066797 190444942 0.9075477226
+## 1    1   DDX11L1         8     11874     14409 0.0847487326
+## 2    1    NBPF20         4 144151519 144830407 0.1672497474
+## 3    1 GNG12-AS1         4  68297971  68668670 0.9106787507
+## 4    1  MIR548F1         4 186029867 186446655 0.7279069874
+## 5    1     TESK2         4  45809555  45923543 0.4533543012
+## 6    1   SDCCAG8         8 243449574 243663393 0.7407422199
+## 7    1     WDR63         8  85527993  85598821 0.9606435838
+## 8    1       CR1        12 207669473 207783033 0.8041960004
+## 9    1     GLIS1         4  53971906  54199877 0.4744870256
+## 10   1      DAB1         4  57463579  58716211 0.4508580804
+## 11   1       DPT         4 168664695 168698442 0.1560027213
+## 12   1       AK4         4  65613850  65697828 0.2581893840
+## 13   1     EPRS1         8 220160484 220220000 0.9533386541
+## 14   1     NTNG1         4 107682629 108024475 0.2729594107
+## 15   1      ATF6        20 161736034 161835745 0.9033057978
+## 16   1    SRGAP2         8 206557369 206628046 0.0922573404
+## 17   1       AK5         4  77747662  78025654 0.0618272498
+## 18   1    BRINP3         4 190066797 190444942 0.9174914197
 ## 19   1 LINC01140         4  87458690  87634886 1.0000000000
-## 20   1     KCNT2         4 196194913 196577499 0.5064591713
-## 21   1   TRABD2B         8  48226200  48462562 0.2043238121
+## 20   1     KCNT2         4 196194913 196577499 0.5061566297
+## 21   1   TRABD2B         8  48226200  48462562 0.1934111754
 ## 22   1   C1orf53         8 197871682 197876497 1.0000000000
-## 23   1      NCF2         4 183524697 183559739 0.3823666490
-## 24   1      NPR1         4 153651164 153666468 0.9701942315
-## 25   1   PLEKHO1         4 150122170 150131825 0.6557094600
-## 26   1     PI4KB         8 151264273 151300191 0.4008049974
-## 27   1     GDAP2         4 118406107 118472302 0.2892801551
-## 28   1      ST7L         2 113066141 113161550 0.0261451739
-## 29   1     MARC2        16 220921676 220957596 0.3610214072
-## 30   1    KIF26B         8 245318287 245809683 0.0112027554
-## 31   1      HHAT         4 210612927 210849638 0.2740483533
-## 32   1   GATAD2B         8 153777203 153895451 0.8740477282
-## 33   1     LRRC7         4  70225874  70589171 0.5361588196
-## 34   1     LRRC7         4  70032868  70340687 0.9554221906
-## 35   1      RGS7         4 240938817 241520478 0.5230101041
-## 36   1      RYR2         8 237205702 237997288 0.4957936667
+## 23   1      NCF2         4 183524697 183559739 0.3618116036
+## 24   1      NPR1         4 153651164 153666468 0.9310691422
+## 25   1   PLEKHO1         4 150122170 150131825 0.6559804018
+## 26   1     PI4KB         8 151264273 151300191 0.4195001097
+## 27   1     GDAP2         4 118406107 118472302 0.2902448406
+## 28   1      ST7L         2 113066141 113161550 0.0253661325
+## 29   1     MARC2        16 220921676 220957596 0.3536327964
+## 30   1    KIF26B         8 245318287 245809683 0.0074911306
+## 31   1      HHAT         4 210612927 210849638 0.2513181848
+## 32   1   GATAD2B         8 153777203 153895451 0.8676457287
+## 33   1     LRRC7         4  70225874  70589171 0.5400236532
+## 34   1     LRRC7         4  70032868  70340687 0.8963803292
+## 35   1      RGS7         4 240938817 241520478 0.5196096046
+## 36   1      RYR2         8 237205702 237997288 0.4821861781
 ## 37   1    SLC2A5         4   9117507   9148510 1.0000000000
-## 38   1    WASH7P        12     14362     16765 0.7074115674
+## 38   1    WASH7P        12     14362     16765 0.7072212540
 ## 39   1    WASH7P         8     15603     29370 1.0000000000
-## 40   1      EVI5         4  93029199  93159945 0.3148725824
-## 41   1     TTC13         4 231041987 231114618 0.7627248706
-## 42   1   C1orf21         4 184356150 184598155 0.2523760407
-## 43   1    IGSF21         4  18434240  18704977 0.5651992871
-## 44   1     DISP1         4 222988431 223179337 0.0007549474
-## 45   1       CD2         4 117297086 117308084 0.1012592907
-## 46   1  C1orf158         8  12806163  12821102 0.4915750033
-## 47   1    NOS1AP         4 162039581 162326974 0.3039363004
-## 48   1    CEP104         8   3750235   3773797 0.4982672049
-## 49   1    CDK11B         4   1571100   1655775 0.7897996122</code></pre>
+## 40   1      EVI5         4  93029199  93159945 0.3005648182
+## 41   1     TTC13         4 231041987 231114618 0.7230444601
+## 42   1   C1orf21         4 184356150 184598155 0.2612908984
+## 43   1    IGSF21         4  18434240  18704977 0.5568757312
+## 44   1     DISP1         4 222988431 223179337 0.0009504265
+## 45   1       CD2         4 117297086 117308084 0.1065312662
+## 46   1  C1orf158         8  12806163  12821102 0.5075609992
+## 47   1    NOS1AP         4 162039581 162326974 0.3133602297
+## 48   1    CEP104         8   3750235   3773797 0.4976301407
+## 49   1    CDK11B         4   1571100   1655775 0.7795948893</code></pre>
 </div>
 </div>
 <div id="using-mega2r-to-carry-out-automated-gene-based-association-tests-using-famskat_rc" class="section level1">
@@ -1412,7 +1412,7 @@ biocLite(&quot;org.Hs.eg.db&quot;)</code></pre>
 <p>These data are saved in the data frame, <code>famSKATRC_results</code>, in the environment. Note: The results are always appended to the data frame. You should truncate it when necessary. Also, you may want to save these results to a file.</p>
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" data-line-number="1"><span class="kw">print</span>(ENV<span class="op">$</span>famSKATRC_results)</a></code></pre></div>
 <pre><code>##   chr   gene nvariants   start     end user.self sys.self elapsed famSKATRC1
-## 1   1 CEP104         8 3728644 3773797      3.52    0.313   3.922   0.417261
+## 1   1 CEP104         8 3728644 3773797     3.325    0.264   3.604   0.417261
 ##   famSKATRC2 famSKATRC3 famSKATRC4
 ## 1  0.5111286  0.6570682  0.7798193</code></pre>
 <div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" data-line-number="1"><span class="co"># we will skip this line for the Vignette document production because it takes</span></a>
@@ -1442,7 +1442,7 @@ Processing time scales with sample size and number of ranges/genes to be process
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;</code></pre>
 <pre><code>##   chr gene nvariants    start      end user.self sys.self elapsed famSKATRC1
-## 2   1  AK5         4 77747662 78025654     4.279    0.244   4.545   0.182881
+## 2   1  AK5         4 77747662 78025654     4.208    0.202   4.414   0.182881
 ##   famSKATRC2 famSKATRC3 famSKATRC4
 ## 2  0.2504308  0.5136662  0.8300378
 ## ST7L snp144498 186 81 9 
@@ -1452,7 +1452,7 @@ Processing time scales with sample size and number of ranges/genes to be process
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;</code></pre>
 <pre><code>##   chr gene nvariants     start       end user.self sys.self elapsed famSKATRC1
-## 3   1 ST7L         2 113066141 113153625      3.27    0.228   3.511  0.2117074
+## 3   1 ST7L         2 113066141 113153625     3.239    0.207   3.453  0.2117074
 ##   famSKATRC2 famSKATRC3 famSKATRC4
 ## 3  0.2117074  0.2117074  0.2117074
 ## KIF26B snp358996 276 0 0 
@@ -1468,7 +1468,7 @@ Processing time scales with sample size and number of ranges/genes to be process
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;</code></pre>
 <pre><code>##   chr   gene nvariants     start       end user.self sys.self elapsed
-## 4   1 KIF26B         7 245318287 245809683     3.245    0.231   3.494
+## 4   1 KIF26B         7 245318287 245809683     3.169    0.198   3.371
 ##   famSKATRC1 famSKATRC2 famSKATRC3 famSKATRC4
 ## 4  0.4889175  0.5186314  0.5168329  0.3973495
 ## DISP1 snp332780 274 2 0 
@@ -1481,16 +1481,16 @@ Processing time scales with sample size and number of ranges/genes to be process
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;
 ## tryFn() &lt;simpleWarning:: imaginary parts discarded in coercion&gt;</code></pre>
 <pre><code>##   chr  gene nvariants     start       end user.self sys.self elapsed famSKATRC1
-## 5   1 DISP1         3 222988431 223179337     3.227    0.215   3.449          1
+## 5   1 DISP1         3 222988431 223179337     3.238    0.217   3.468          1
 ##   famSKATRC2 famSKATRC3 famSKATRC4
 ## 5  0.4021516  0.1161365  0.0509027</code></pre>
 <div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" data-line-number="1"><span class="kw">print</span>(ENV<span class="op">$</span>famSKATRC_results)</a></code></pre></div>
 <pre><code>##   chr   gene nvariants     start       end user.self sys.self elapsed
-## 1   1 CEP104         8   3728644   3773797     3.520    0.313   3.922
-## 2   1    AK5         4  77747662  78025654     4.279    0.244   4.545
-## 3   1   ST7L         2 113066141 113153625     3.270    0.228   3.511
-## 4   1 KIF26B         7 245318287 245809683     3.245    0.231   3.494
-## 5   1  DISP1         3 222988431 223179337     3.227    0.215   3.449
+## 1   1 CEP104         8   3728644   3773797     3.325    0.264   3.604
+## 2   1    AK5         4  77747662  78025654     4.208    0.202   4.414
+## 3   1   ST7L         2 113066141 113153625     3.239    0.207   3.453
+## 4   1 KIF26B         7 245318287 245809683     3.169    0.198   3.371
+## 5   1  DISP1         3 222988431 223179337     3.238    0.217   3.468
 ##   famSKATRC1 famSKATRC2 famSKATRC3 famSKATRC4
 ## 1  0.4172610  0.5111286  0.6570682  0.7798193
 ## 2  0.1828810  0.2504308  0.5136662  0.8300378
@@ -1678,15 +1678,15 @@ The arguments are:
 <a class="sourceLine" id="cb175-8" data-line-number="8">gdsfile =<span class="st"> </span><span class="kw">file.path</span>(<span class="kw">where_mega2rtutorial_data</span>(), <span class="st">&quot;foo.gds&quot;</span>)</a>
 <a class="sourceLine" id="cb175-9" data-line-number="9">gdsn =<span class="st"> </span><span class="kw">Mega2gdsfmt</span>(gdsfile, ENV<span class="op">$</span>markers[ENV<span class="op">$</span>markers<span class="op">$</span>chromosome <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, ], <span class="dt">SeqArray =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## Clean up the fragments of GDS file:
-##     open the file '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds' (683.0K)
+##     open the file '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds' (683.0K)
 ##     # of fragments: 79
-##     save to '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds.tmp'
-##     rename '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds.tmp' (92.2K, reduced: 590.8K)
+##     save to '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds.tmp'
+##     rename '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds.tmp' (92.2K, reduced: 590.8K)
 ##     # of fragments: 38</code></pre>
 <p>Note: The line above places the data for only chromosome 1 in the gds file. (Recall that our simulated data is only on chromosome 1). Note: In general, you can filter the second argument, <code>ENV$markers</code>, as needed. If the second argument is not present, all the markers are written out.</p>
 <p>The created gds file with its variable heirarchy values is listed below:</p>
 <div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1"><span class="kw">print</span>(gdsn)</a></code></pre></div>
-<pre><code>## File: /private/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T/RtmpfAYMBp/Mega2Rtutorial/foo.gds (92.2K)
+<pre><code>## File: /private/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T/Rtmpsmvxsw/Mega2Rtutorial/foo.gds (92.2K)
 ## +    [  ] *
 ## |--+ description   [  ]
 ## |--+ sample.id   { Str8 1380 LZMA_ra(2.37%), 317B }
@@ -1724,15 +1724,15 @@ The arguments are:
 <a class="sourceLine" id="cb181-4" data-line-number="4">gdsfile =<span class="st"> </span><span class="kw">file.path</span>(<span class="kw">where_mega2rtutorial_data</span>(), <span class="st">&quot;foo.gds&quot;</span>)</a>
 <a class="sourceLine" id="cb181-5" data-line-number="5">gdsn =<span class="st"> </span><span class="kw">Mega2gdsfmt</span>(gdsfile, ENV<span class="op">$</span>markers[ENV<span class="op">$</span>markers<span class="op">$</span>chromosome <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, ], <span class="dt">SeqArray =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>## Clean up the fragments of GDS file:
-##     open the file '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds' (345.8K)
+##     open the file '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds' (345.8K)
 ##     # of fragments: 71
-##     save to '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds.tmp'
-##     rename '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//RtmpfAYMBp/Mega2Rtutorial/foo.gds.tmp' (84.0K, reduced: 261.8K)
+##     save to '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds.tmp'
+##     rename '/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T//Rtmpsmvxsw/Mega2Rtutorial/foo.gds.tmp' (84.0K, reduced: 261.8K)
 ##     # of fragments: 29</code></pre>
 <p>Note: The line above places the data for only chromosome 1 in the gds file. (Recall that our simulated data is only on chromosome 1). Note: In general, you can filter the second argument, <code>ENV$markers</code>, as needed. If the second argument is not present, all the markers are written out.</p>
 <p>The generated file and contents are listed below:</p>
 <div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1"><span class="kw">print</span>(gdsn)</a></code></pre></div>
-<pre><code>## File: /private/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T/RtmpfAYMBp/Mega2Rtutorial/foo.gds (84.0K)
+<pre><code>## File: /private/var/folders/fh/_24twzc50lz_hj83x3r29t3c0000gq/T/Rtmpsmvxsw/Mega2Rtutorial/foo.gds (84.0K)
 ## +    [  ] *
 ## |--+ description   [  ]
 ## |--+ sample.id   { Str8 1380 LZMA_ra(2.37%), 317B }
