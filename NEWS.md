@@ -1,6 +1,10 @@
-# Version 1.0.7 (2020-05-19
+# Version 1.0.8 (2020-09-28)
 
--- Updated 'Mega2RVersion' so that Mega2R will read databases produced by the current version of Mega2R.
+-- Fixed bare returns without parentheses.
+
+# Version 1.0.7 (2020-05-19)
+
+-- Updated 'Mega2RVersion' so that Mega2R will read databases produced by the current version of Mega2.
 
 # Version 1.0.6 (2020-05-12)
 

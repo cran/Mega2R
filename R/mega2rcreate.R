@@ -376,7 +376,7 @@ dbmega2_import = function(dbname,
     }
 
     gc(verbose = FALSE)
-    return (envir)
+    return(envir)
 }
 
 #' generate a phenotype data frame
@@ -558,7 +558,7 @@ resetMega2ENV = function () {
     envir$dosageRaw = c(0x10001, 0x10002, 0x20001, 0x20002, 0)
     envir$dosage    = c(      0,       1,       1,       2, 0)
 
-    return (envir)
+    return(envir)
 }
 
 #' show the association between mapno and mapname
@@ -656,12 +656,13 @@ getgenotype_person = function(perid = 1, envir = ENV) {
 #  2 1|2
 #  3 2|2
 
-  return
+  return(
     ifelse(rv4==0, paste0(a1, a1),
            ifelse(rv4==1, paste0("00"),
                   ifelse(rv4==2, paste0(a1, a2), paste0(a2, a2))
                   )
            )
+        )
 }
 
 ################################################################
@@ -712,7 +713,7 @@ getgenotype_person = function(perid = 1, envir = ENV) {
 #'}
 getgenotypes_R = function(markers_arg, sepstr = "", envir = ENV) {
 
-  return
+  return(
     if (envir$MARKER_SCHEME == 1) {
         getgenotypes_Ri(markers_arg$locus_link, markers_arg$locus_link_fill,
                         envir$unified_genotype_table, envir$allele_table,
@@ -720,6 +721,7 @@ getgenotypes_R = function(markers_arg, sepstr = "", envir = ENV) {
     } else {  # must be == 2
 
     }
+   )
 }
 
 
@@ -775,7 +777,7 @@ getgenotypes_R = function(markers_arg, sepstr = "", envir = ENV) {
 getgenotypes = function(markers_arg, sepstr = "", envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
-  return
+  return(
     if (envir$MARKER_SCHEME == 1) {
         getgenotypes_1(markers_arg$locus_link, markers_arg$locus_link_fill,
                        envir$unified_genotype_table, envir$allele_table,
@@ -785,6 +787,7 @@ getgenotypes = function(markers_arg, sepstr = "", envir = ENV) {
                        envir$unified_genotype_table, envir$locus_allele_table,
                        sepstr, envir$PhenoCnt)
     }
+   )
 }
 
 getgenotypes_C = getgenotypes
@@ -839,7 +842,7 @@ getgenotypes_C = getgenotypes
 getgenotypesraw = function(markers_arg, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
-  return
+  return(
     if (envir$MARKER_SCHEME == 1) {
         getgenotypesraw_1(markers_arg$locus_link, markers_arg$locus_link_fill,
                           envir$unified_genotype_table, envir$allele_table,
@@ -849,6 +852,7 @@ getgenotypesraw = function(markers_arg, envir = ENV) {
                           envir$unified_genotype_table, envir$locus_allele_table,
                           envir$PhenoCnt)
     }
+   )
 }
 
 #' process the genotype matrix for specified markers and return the corresponding GenABEL genotype matrix
@@ -905,7 +909,7 @@ getgenotypesraw = function(markers_arg, envir = ENV) {
 getgenotypesgenabel = function(markers_arg, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
-  return
+  return(
     if (envir$MARKER_SCHEME == 1) {
         getgenotypesgenabel_1(markers_arg$locus_link, markers_arg$locus_link_fill,
                               envir$unified_genotype_table, envir$allele_table,
@@ -915,6 +919,7 @@ getgenotypesgenabel = function(markers_arg, envir = ENV) {
                               envir$unified_genotype_table, envir$locus_allele_table,
                               envir$PhenoCnt)
     }
+   )
 }
 
 #' fetch dosage integer matrix for specified markers
@@ -972,7 +977,7 @@ getgenotypesgenabel = function(markers_arg, envir = ENV) {
 getgenotypesdos = function(markers_arg, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
-  return
+  return(
     if (envir$MARKER_SCHEME == 1) {
         getgenotypesdos_1(markers_arg$locus_link, markers_arg$locus_link_fill,
                           envir$unified_genotype_table, envir$allele_table,
@@ -982,6 +987,7 @@ getgenotypesdos = function(markers_arg, envir = ENV) {
                           envir$unified_genotype_table, envir$locus_allele_table,
                           envir$PhenoCnt)
     }
+  )
 }
 
 #' computeDosage function

@@ -61,7 +61,7 @@ function(data,Pgte=0.01,Pssw=0.01,Pmsw=0.01,odds=1000,tabonly=FALSE,Fmale=0.8,Ff
 	if ( is.null(genABEL.crnames) ||
         	is.null(genABEL.perid.summary)) {
           warning("genABEL has been archived and is not available\n")
-          return
+          return(NULL)
 	}
 
 	if (!is(data,"snp.data")) stop("data argument should be of snp.data-class")
@@ -120,7 +120,7 @@ function(phenofile = "pheno.dat", genofile = "geno.raw",force = TRUE, makemap=FA
         if ( is.null(genABEL.snp.data) ||
              is.null(genABEL.sortmap.internal)) {
           warning("genABEL has been archived and is not available\n")
-          return (NULL)
+          return(NULL)
         }
 
 # check that ID and SEX are correct
