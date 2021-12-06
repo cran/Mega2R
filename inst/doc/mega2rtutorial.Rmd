@@ -688,11 +688,14 @@ Annotation database.
 
 The function applyFnToGenes is called below to look for the
 transcripts of genes.  We happen to know gene, “CEP104”, is in our
-data. Remember, this lookup is using “hg18”.
+data. Remember, this look up is using “hg18”.
 
 ```{r,applyfntogenes0,eval=TRUE}
-    # apply function "show" to all transcripts on genes ELL2 and CARD15
-    applyFnToGenes(show, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  # apply function "show" to all transcripts on genes ELL2 and CARD15
+  applyFnToGenes(show, genes_arg = c("CEP104"))
+}
 ```
 
 Switching to “hg19”, we see a different transcript id and transcript
@@ -700,8 +703,11 @@ name as well as different start/end. But the same set of markers from
 our study fall in each range.
 
 ```{r,applyfntogenes19,eval=TRUE}
-    setAnnotations("TxDb.Hsapiens.UCSC.hg19.knownGene", "org.Hs.eg.db")
-    applyFnToGenes(show, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  setAnnotations("TxDb.Hsapiens.UCSC.hg19.knownGene", "org.Hs.eg.db")
+  applyFnToGenes(show, genes_arg = c("CEP104"))
+}
 ```
 
 The applyFnToGenes function has several other optional arguments that
@@ -766,11 +772,17 @@ show3 = function(m, r, e) {
 
 Try running
 ```{r,xshow2,eval=TRUE}
-    applyFnToGenes(show2, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(show2, genes_arg = c("CEP104"))
+}
 ```
 or
 ```{r,xshow3,eval=TRUE}
-    applyFnToGenes(show3, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(show3, genes_arg = c("CEP104"))
+}
 ```
 
 ## 5.4 Iterating through the Genotypes
@@ -992,21 +1004,36 @@ of transcript start/end ranges, to compute the genotype matrix for these markers
 and finally to call the callback function with appropriate arguments.
 
 ```{r,eval=FALSE}
-applyFnToGenes(DOpedgene, genes_arg = c('DISP1', 'KIF26B', 'AK5', 'ST7L'), envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(
+    DOpedgene,
+    genes_arg = c('DISP1', 'KIF26B', 'AK5', 'ST7L'),
+    envir = ENV
+  )
+}
 ```
 
 But let us run this function for a few genes:
 
 ```{r,FnToGenes,eval=TRUE}
-applyFnToGenes(DOpedgene, genes_arg = c('DISP1', 'AK5'), envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(DOpedgene,
+                 genes_arg = c('DISP1', 'AK5'),
+                 envir = ENV)
+}
 ```
 
 You could run `Mega2pedgene` on all the transcript entries, but it takes a rather long time.
 You would type:
 
 ```{r, FnToGenesall,eval=FALSE}
-# we will skip this line for the Rmd document production because it takes too long
-applyFnToGenes(DOpedgene, genes_arg = '*', envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  # we will skip this line for the Rmd document production because it takes too long
+  applyFnToGenes(DOpedgene, genes_arg = '*', envir = ENV)
+}
 ```
 
 Note: The default behavior of `DOpedgene` is to append any new results to the end of the
@@ -1192,7 +1219,17 @@ Let us run the Mega2SKAT function for a few genes:
 
 ```{r,FnToGenesSKAT,eval=TRUE}
 ENV$SKAT_results = ENV$SKAT_results[0, ]
-Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(0.5,0.5), genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2SKAT(
+    ENV$phe[, 3] - 1 ~ 1,
+    "D",
+    kernel = "linear.weighted",
+    weights.beta = c(0.5, 0.5),
+    genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'),
+    envir = ENV
+  )
+}
 ```
 
 ```{r, FnToGenesa,eval=TRUE}
@@ -1206,7 +1243,17 @@ If you are adventurous you can look at all the transcripts:
 ```{r,FnToGene2s,eval=TRUE}
 ENV$verbose = FALSE
 ENV$SKAT_results = ENV$SKAT_results[0, ]
-Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(0.5,0.5), genes = '*', envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2SKAT(
+    ENV$phe[, 3] - 1 ~ 1,
+    "D",
+    kernel = "linear.weighted",
+    weights.beta = c(0.5, 0.5),
+    genes = '*',
+    envir = ENV
+  )
+}
 ```
 
 Note: The default behavior of `Mega2SKAT` is to append any new results to the end of the
@@ -1388,7 +1435,7 @@ print(ENV$famSKATRC_results)
 ```{r, FnToRange2fams,eval=FALSE}
 # we will skip this line for the Vignette document production because it takes too long
 ENV$verbose = FALSE
-Mega2famSKATRc(pheno=3, gs=1:nrow(ENV$refRanges))
+Mega2famSKATRC(pheno=3, gs=1:nrow(ENV$refRanges))
 print(ENV$famSKATRC_results)
 ```
 
@@ -1403,8 +1450,15 @@ samples in the database.
 
 ```{r,FnToGenesfamSKAT,eval=TRUE}
 ENV$verbose = TRUE
-Mega2famSKATRC(pheno=3, genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
-print(ENV$famSKATRC_results)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2famSKATRC(
+    pheno = 3,
+    genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'),
+    envir = ENV
+  )
+  print(ENV$famSKATRC_results)
+}
 ```
 
 If you are adventurous you can look at all the genes:
@@ -1414,7 +1468,12 @@ from part of chromosome one, whereas the ranges cover the whole genome.)
 
 ```{r,FnToGene2fams,eval=FALSE}
 ENV$verbose = FALSE
-Mega2famSKATRC(pheno=3, genes = '*', envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2famSKATRC(pheno = 3,
+                 genes = '*',
+                 envir = ENV)
+}
 print(ENV$famSKATRC_results)
 ```
 

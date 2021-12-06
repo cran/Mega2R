@@ -121,12 +121,18 @@ str(ENV$locus_table)
     ENV$entrezGene
 
 ## ----applyfntogenes0,eval=TRUE------------------------------------------------
-    # apply function "show" to all transcripts on genes ELL2 and CARD15
-    applyFnToGenes(show, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  # apply function "show" to all transcripts on genes ELL2 and CARD15
+  applyFnToGenes(show, genes_arg = c("CEP104"))
+}
 
 ## ----applyfntogenes19,eval=TRUE-----------------------------------------------
-    setAnnotations("TxDb.Hsapiens.UCSC.hg19.knownGene", "org.Hs.eg.db")
-    applyFnToGenes(show, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  setAnnotations("TxDb.Hsapiens.UCSC.hg19.knownGene", "org.Hs.eg.db")
+  applyFnToGenes(show, genes_arg = c("CEP104"))
+}
 
 ## ----applyfntogenes,eval=TRUE-------------------------------------------------
     # apply function "show" to all genotypes on chromosomes 1 for two base
@@ -174,10 +180,16 @@ show3 = function(m, r, e) {
 }
 
 ## ----xshow2,eval=TRUE---------------------------------------------------------
-    applyFnToGenes(show2, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(show2, genes_arg = c("CEP104"))
+}
 
 ## ----xshow3,eval=TRUE---------------------------------------------------------
-    applyFnToGenes(show3, genes_arg = c("CEP104"))
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(show3, genes_arg = c("CEP104"))
+}
 
 ## ----getgenotypes,eval=TRUE---------------------------------------------------
     genotype = getgenotypes(ENV$markers[1:10,])
@@ -206,14 +218,29 @@ Mega2pedgene(gs=50:60)
 #  applyFnToRanges(DOpedgene, ENV$refRanges, ENV$refIndices, envir = ENV)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  applyFnToGenes(DOpedgene, genes_arg = c('DISP1', 'KIF26B', 'AK5', 'ST7L'), envir = ENV)
+#  if ((require("org.Hs.eg.db")  &
+#       require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+#    applyFnToGenes(
+#      DOpedgene,
+#      genes_arg = c('DISP1', 'KIF26B', 'AK5', 'ST7L'),
+#      envir = ENV
+#    )
+#  }
 
 ## ----FnToGenes,eval=TRUE------------------------------------------------------
-applyFnToGenes(DOpedgene, genes_arg = c('DISP1', 'AK5'), envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  applyFnToGenes(DOpedgene,
+                 genes_arg = c('DISP1', 'AK5'),
+                 envir = ENV)
+}
 
 ## ---- FnToGenesall,eval=FALSE-------------------------------------------------
-#  # we will skip this line for the Rmd document production because it takes too long
-#  applyFnToGenes(DOpedgene, genes_arg = '*', envir = ENV)
+#  if ((require("org.Hs.eg.db")  &
+#       require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+#    # we will skip this line for the Rmd document production because it takes too long
+#    applyFnToGenes(DOpedgene, genes_arg = '*', envir = ENV)
+#  }
 
 ## ----init_SKAT,message=FALSE--------------------------------------------------
 # Before issuing the next command, make sure you have issued
@@ -246,7 +273,17 @@ print(ENV$SKAT_results)
 
 ## ----FnToGenesSKAT,eval=TRUE--------------------------------------------------
 ENV$SKAT_results = ENV$SKAT_results[0, ]
-Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(0.5,0.5), genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2SKAT(
+    ENV$phe[, 3] - 1 ~ 1,
+    "D",
+    kernel = "linear.weighted",
+    weights.beta = c(0.5, 0.5),
+    genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'),
+    envir = ENV
+  )
+}
 
 ## ---- FnToGenesa,eval=TRUE----------------------------------------------------
 print(ENV$SKAT_results)
@@ -254,7 +291,17 @@ print(ENV$SKAT_results)
 ## ----FnToGene2s,eval=TRUE-----------------------------------------------------
 ENV$verbose = FALSE
 ENV$SKAT_results = ENV$SKAT_results[0, ]
-Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(0.5,0.5), genes = '*', envir = ENV)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2SKAT(
+    ENV$phe[, 3] - 1 ~ 1,
+    "D",
+    kernel = "linear.weighted",
+    weights.beta = c(0.5, 0.5),
+    genes = '*',
+    envir = ENV
+  )
+}
 
 ## ---- FnToGene2a,eval=TRUE----------------------------------------------------
 print(ENV$SKAT_results)
@@ -291,17 +338,29 @@ print(ENV$famSKATRC_results)
 ## ---- FnToRange2fams,eval=FALSE-----------------------------------------------
 #  # we will skip this line for the Vignette document production because it takes too long
 #  ENV$verbose = FALSE
-#  Mega2famSKATRc(pheno=3, gs=1:nrow(ENV$refRanges))
+#  Mega2famSKATRC(pheno=3, gs=1:nrow(ENV$refRanges))
 #  print(ENV$famSKATRC_results)
 
 ## ----FnToGenesfamSKAT,eval=TRUE-----------------------------------------------
 ENV$verbose = TRUE
-Mega2famSKATRC(pheno=3, genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'), envir = ENV)
-print(ENV$famSKATRC_results)
+if ((require("org.Hs.eg.db")  &
+     require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+  Mega2famSKATRC(
+    pheno = 3,
+    genes = c('DISP1', 'AK5', 'KIF26B', 'ST7L'),
+    envir = ENV
+  )
+  print(ENV$famSKATRC_results)
+}
 
 ## ----FnToGene2fams,eval=FALSE-------------------------------------------------
 #  ENV$verbose = FALSE
-#  Mega2famSKATRC(pheno=3, genes = '*', envir = ENV)
+#  if ((require("org.Hs.eg.db")  &
+#       require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
+#    Mega2famSKATRC(pheno = 3,
+#                   genes = '*',
+#                   envir = ENV)
+#  }
 #  print(ENV$famSKATRC_results)
 
 ## ----mega2vcflib--------------------------------------------------------------

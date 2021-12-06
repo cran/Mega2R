@@ -1,3 +1,7 @@
+# Version 1.0.9 (2021-12-04)
+
+-- Adjusted vignette to use TxDb.Hsapiens.UCSC.hg19.knownGene and org.Hs.eg.db conditionally.
+
 # Version 1.0.8 (2020-09-28)
 
 -- Fixed bare returns without parentheses.

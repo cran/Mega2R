@@ -1,6 +1,6 @@
-9851187b1aab4419a53384b43646d848 *DESCRIPTION
+96e80786d18fb412e83d7629d11794e6 *DESCRIPTION
 82b43886e67574b1aac088559c091e43 *NAMESPACE
-40c32bbabb515fcd37a39a6a6ccebc50 *NEWS.md
+4a485382b16aa271e505a57afa2772dc *NEWS.md
 ebe4c3e88bda3661d3b0f3e1fdcc620d *R/RcppExports.R
 ffb8fe77c366354e08ea17c2535b865e *R/mega2famskatrc.R
 d2f96abce1bca825de20ba302a418fdb *R/mega2gdsfmt.R
@@ -15,10 +15,10 @@ a7e93b3fee52f4ee3e192ae70bd9fe9f *R/mega2riterate.R
 a0ec49e7fcf09dfa937829fdae105793 *R/mega2vcf.R
 10629ca795d61ae534c965555ed36b59 *R/sysdata.rda
 36b5d2c321c8b70ed64ffd316a3bb8ab *R/zzz.R
-4983253ae504c3a9881454c3a31ef951 *build/vignette.rds
-1303710b954a9dfaa83eaf80efb49abc *inst/doc/mega2rtutorial.R
-13c73a5d9f63f338705a2036db1520f8 *inst/doc/mega2rtutorial.Rmd
-50a831a93459cc344265bcbe86e77c14 *inst/doc/mega2rtutorial.html
+f99faf9bdf0d1f9740e8a9485549f70a *build/vignette.rds
+3e997ff7bbd6f812067a452936609e2e *inst/doc/mega2rtutorial.R
+a5cd3689d49abe4067e607b61f73d097 *inst/doc/mega2rtutorial.Rmd
+f52d0c11f8586b0153e30cb6dacdac61 *inst/doc/mega2rtutorial.html
 9dbc12015b7802ad30e9be56829fef05 *inst/exdata/MEGA2.BATCH.seqsimm
 056bb7c2231af5f4b42ded2eedd1fbfc *inst/exdata/MEGA2.BATCH.seqsimr
 cae3bf5d058a7d501c4a9c40ae9adc8a *inst/exdata/MEGA2.BATCH.srdta
@@ -93,4 +93,4 @@ fb6719de9f00838e5ba4305d8cc47dbd *man/setfam.Rd
 a40689ecc395b3eec4d296151a0a854a *man/where_mega2rtutorial_data.Rd
 7281140180655e4ec2bffcbabca160ea *src/RcppExports.cpp
 1035a0330b248674e86d8edb2825b8d1 *src/getgenotypes.cpp
-13c73a5d9f63f338705a2036db1520f8 *vignettes/mega2rtutorial.Rmd
+a5cd3689d49abe4067e607b61f73d097 *vignettes/mega2rtutorial.Rmd
