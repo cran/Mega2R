@@ -1685,7 +1685,7 @@ str(seqsimgwaa)
 # 11 Converting Mega2R data to GDS (CoreArray) format
 
 CoreArray Genetic Data Structure (GDS)^[Zheng, Xiuwen, David Levine, Jess Shen, Stephanie M. Gogarten, Cathy Laurie, and Bruce S. Weir. 2012. “A High-Performance Computing Toolset for Relatedness and Principal Component Analysis of Snp Data.” Bioinformatics (Oxford, England) 28 (24):3326–8. https://doi.org/10.1093/bioinformatics/bts606.]
-is a C++ package available from SourceForge^[https://sourceforge.net] as http://corearray.sourceforge.net.
+is implemented using an optimized C++ library (CoreArray).
 The Bioconductor^[Gentleman, Robert C., Vincent J. Carey, Douglas M. Bates, Ben Bolstad, Marcel Dettling, Sandrine Dudoit, Byron Ellis, et al. 2004. “Bioconductor: Open Software Development for Computational Biology and Bioinformatics.” Genome Biology 5 (10):1–16. https://doi.org/10.1186/gb-2004-5-10-r80.]
 package 
 `gdsfmt` (https://bioconductor.org/packages/release/bioc/html/gdsfmt.html) provides a machine independent 

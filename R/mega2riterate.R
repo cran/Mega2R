@@ -488,8 +488,8 @@ setRanges = function (ranges, indices, envir = ENV) {
     if (missing(envir)) envir = get("ENV", parent.frame(), inherits = TRUE)
 
     ranges = data.frame(ranges, stringsAsFactors = FALSE)
-    if (class(ranges[ , indices[2]]) != "numeric") ranges[ , indices[2]] = as.numeric(ranges[ , indices[2]])
-    if (class(ranges[ , indices[3]]) != "numeric") ranges[ , indices[3]] = as.numeric(ranges[ , indices[3]])
+    if (!inherits(ranges[ , indices[2]],"numeric")) ranges[ , indices[2]] = as.numeric(ranges[ , indices[2]])
+    if (!inherits(ranges[ , indices[3]],"numeric")) ranges[ , indices[3]] = as.numeric(ranges[ , indices[3]])
     fix = fixRanges(ranges, indices, envir)
     envir$refRanges  = fix[[1]]
     envir$refIndices = fix[[2]]
@@ -497,7 +497,7 @@ setRanges = function (ranges, indices, envir = ENV) {
 
 fixRanges = function (ranges, indices, envir = ENV) {
 
-    if (class(ranges[ , indices[1]]) == "character")
+    if (inherits(ranges[ , indices[1]],"character"))
         ranges[ , indices[1]] = envir$chr2int$chr[match(ranges[,indices[1]], envir$chr2int$string)]
 
     ind = length(indices)
@@ -651,8 +651,8 @@ applyFnToRanges = function (op          = function (markers, range, envir) {},
         fix = fixRanges(ranges, indices, envir)
         ranges  = fix[[1]]
         indices = fix[[2]]
-        if (class(ranges[ , indices[2]]) != "numeric") ranges[ , indices[2]] = as.numeric(ranges[ , indices[2]])
-        if (class(ranges[ , indices[3]]) != "numeric") ranges[ , indices[3]] = as.numeric(ranges[ , indices[3]])
+        if (!inherits(ranges[ , indices[2]],"numeric")) ranges[ , indices[2]] = as.numeric(ranges[ , indices[2]])
+        if (!inherits(ranges[ , indices[3]],"numeric")) ranges[ , indices[3]] = as.numeric(ranges[ , indices[3]])
     }
     envir$refCol = indices
 

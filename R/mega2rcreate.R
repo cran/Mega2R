@@ -26,15 +26,6 @@
 #
 # ===========================================================================
 
-#' Mega2R package
-#'
-#' @description This package reads a Mega2 SQLite3 database into data frames and
-#'	makes the contained genotypes/phenotypes/linkage data available for analysis.
-#'
-#' @author Robert V. Baron and Daniel E. Weeks
-#' @docType package
-#' @name Mega2R
-NULL
 
 #library(DBI)
 #library(RSQLite)
@@ -328,13 +319,13 @@ dbmega2_import = function(dbname,
     envir$MARKER_SCHEME  = envir$int_table[envir$int_table$key == 'MARKER_SCHEME', 3]
     envir$DBcompress     = envir$int_table[envir$int_table$key == 'dbCompression', 3]
     envir$DBMega2Version = envir$charstar_table[envir$charstar_table$key == 'DBMega2Version', 3]
-    
+
     lt3 = function(aa, bb) {
                             ( (aa[1] < bb[1]) || ( (aa[1] == bb[1]) &&
                                             ( (aa[2] < bb[2]) || (aa[2] == bb[2] && (aa[3] < bb[3])) ) ) )
             }
     lt2 = function(aa, bb) {
-                            ( (aa[1] < bb[1]) || ( (aa[1] == bb[1]) && (aa[2] < bb[2]) ) ) 
+                            ( (aa[1] < bb[1]) || ( (aa[1] == bb[1]) && (aa[2] < bb[2]) ) )
             }
     cc = envir$DBMega2Version != 'X.Y.Z'
     if (cc) {
@@ -353,7 +344,7 @@ dbmega2_import = function(dbname,
     }
 
     if ( length(envir$DBcompress) == 0) envir$DBcompress = 0
-    
+
     if (envir$MARKER_SCHEME > 2) {
         stop("Only compressions levels of 1 or 2 are allowed. (",
              envir$MARKER_SCHEME, ")", call. = FALSE)
@@ -540,7 +531,7 @@ resetMega2ENV = function () {
     envir = new.env(parent = emptyenv())
 
     envir$Mega2R     = environment(resetMega2ENV)
-    
+
     envir$refRanges  = refRanges
     envir$refIndices = refIndices
 
@@ -949,7 +940,7 @@ getgenotypesgenabel = function(markers_arg, envir = ENV) {
 #'
 #' @return a list of 3 values, named "ncol", "zero", "geno".
 #'  \describe{
-#'  \item{geno}{is a matrix of dosages as integers.  The value 0 is given to the Major allele 
+#'  \item{geno}{is a matrix of dosages as integers.  The value 0 is given to the Major allele
 #'  value, 1 is given to the heterozygote value, and 2 is given to the Minor allele.
 #'  In the matrix, there is usually one column for each  marker in the \emph{markers_arg} argument.
 #'  But if there would be only the one allele 0 or 2 in the column, the column is ignorednot present.
@@ -996,7 +987,7 @@ getgenotypesdos = function(markers_arg, envir = ENV) {
 #'  Convert the genotypesraw() allele patterns of 0x10001, 0x10002 (or 0x20001), 0x20002, 0
 #"  from the genotype matrix
 #'  to the numbers 0, 1, 2, 9 for each marker. (Reverse, the order iff allele "1" has the
-#'  minor allele frequency.)  
+#'  minor allele frequency.)
 #'
 #' @param markers_arg a data.frame with the following 5 observations:
 #' \describe{
@@ -1038,7 +1029,7 @@ computeDosage = function (markers_arg, range_arg, envir) {
 
     markerNames = markers_arg$MarkerName
     gene  = as.character(range_arg[,envir$refCol[4]])
-    
+
     di = dim(geno_arg)
     geno = matrix(0, nrow = (di[1]), ncol = di[2])
     kk = 0

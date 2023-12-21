@@ -10,13 +10,13 @@ dump_mega2rtutorial_data()
 ## ----mega2rtutDumpls, message=FALSE-------------------------------------------
 list.files(where_mega2rtutorial_data())
 
-## ---- mega2rtutClean,eval=FALSE-----------------------------------------------
+## ----mega2rtutClean,eval=FALSE------------------------------------------------
 #  clean_mega2rtutorial_data()
 
-## ---- install,eval=FALSE------------------------------------------------------
+## ----install,eval=FALSE-------------------------------------------------------
 #  install.packages("Mega2R")
 
-## ---- seqsimrdb,eval=FALSE----------------------------------------------------
+## ----seqsimrdb,eval=FALSE-----------------------------------------------------
 #  library(Mega2R)
 #  # Before issuing the next command, make sure you have issued
 #  # this command `dump_mega2rtutorial_data()` first
@@ -31,13 +31,13 @@ list.files(where_mega2rtutorial_data())
 db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
 ENV = read.Mega2DB(db, verbose = TRUE)
 
-## ---- ls----------------------------------------------------------------------
+## ----ls-----------------------------------------------------------------------
 ls(ENV)
 
-## ---- showMega2ENV------------------------------------------------------------
+## ----showMega2ENV-------------------------------------------------------------
 showMega2ENV() 
 
-## ---- str---------------------------------------------------------------------
+## ----str----------------------------------------------------------------------
 str(ENV$locus_table)
 
 ## ----setrange0----------------------------------------------------------------
@@ -213,7 +213,7 @@ ENV = init_pedgene(db)
 ENV$verbose=TRUE
 Mega2pedgene(gs=50:60)
 
-## ---- FnToRanges,eval=FALSE---------------------------------------------------
+## ----FnToRanges,eval=FALSE----------------------------------------------------
 #  # we will skip this line for the Rmd document production because it takes too long
 #  applyFnToRanges(DOpedgene, ENV$refRanges, ENV$refIndices, envir = ENV)
 
@@ -235,7 +235,7 @@ if ((require("org.Hs.eg.db")  &
                  envir = ENV)
 }
 
-## ---- FnToGenesall,eval=FALSE-------------------------------------------------
+## ----FnToGenesall,eval=FALSE--------------------------------------------------
 #  if ((require("org.Hs.eg.db")  &
 #       require("TxDb.Hsapiens.UCSC.hg19.knownGene")) == TRUE) {
 #    # we will skip this line for the Rmd document production because it takes too long
@@ -256,15 +256,15 @@ ENV = init_SKAT(db, verbose = F, allMarkers = F)
 #  db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
 #  ENV = init_SKAT(db, verbose = T, allMarkers = F)
 
-## ---- FnToRangesSKAT,eval=TRUE------------------------------------------------
+## ----FnToRangesSKAT,eval=TRUE-------------------------------------------------
 ENV$verbose = FALSE
 ENV$SKAT_results = ENV$SKAT_results[0, ]
 Mega2SKAT(ENV$phe[, 3] - 1 ~ 1, "D", kernel = "linear.weighted", weights.beta=c(0.5,0.5))
 
-## ---- FnToRangesa,eval=TRUE---------------------------------------------------
+## ----FnToRangesa,eval=TRUE----------------------------------------------------
 print(ENV$SKAT_results)
 
-## ---- FnToRange2s,eval=FALSE--------------------------------------------------
+## ----FnToRange2s,eval=FALSE---------------------------------------------------
 #  # we will skip this line for the Vignette document production because it takes too long
 #  ENV$verbose = FALSE
 #  ENV$SKAT_results = ENV$SKAT_results[0, ]
@@ -285,7 +285,7 @@ if ((require("org.Hs.eg.db")  &
   )
 }
 
-## ---- FnToGenesa,eval=TRUE----------------------------------------------------
+## ----FnToGenesa,eval=TRUE-----------------------------------------------------
 print(ENV$SKAT_results)
 
 ## ----FnToGene2s,eval=TRUE-----------------------------------------------------
@@ -303,7 +303,7 @@ if ((require("org.Hs.eg.db")  &
   )
 }
 
-## ---- FnToGene2a,eval=TRUE----------------------------------------------------
+## ----FnToGene2a,eval=TRUE-----------------------------------------------------
 print(ENV$SKAT_results)
 
 ## ----init_famSKAT,message=FALSE-----------------------------------------------
@@ -328,14 +328,14 @@ ENV$phe[ENV$phe == 0] = NA
 #  db = file.path(where_mega2rtutorial_data(), "seqsimr.db")
 #  ENV = init_famSKATRC(db, verbose = T)
 
-## ---- FnToRangesfamSKAT,eval=TRUE---------------------------------------------
+## ----FnToRangesfamSKAT,eval=TRUE----------------------------------------------
 ENV$verbose = FALSE
 Mega2famSKATRC(pheno=3,gs=1:60)
 
-## ---- FnToRangesfama,eval=TRUE------------------------------------------------
+## ----FnToRangesfama,eval=TRUE-------------------------------------------------
 print(ENV$famSKATRC_results)
 
-## ---- FnToRange2fams,eval=FALSE-----------------------------------------------
+## ----FnToRange2fams,eval=FALSE------------------------------------------------
 #  # we will skip this line for the Vignette document production because it takes too long
 #  ENV$verbose = FALSE
 #  Mega2famSKATRC(pheno=3, gs=1:nrow(ENV$refRanges))
@@ -377,7 +377,7 @@ if (! dir.exists(vcfdir)) dir.create(vcfdir)
 vcffile = file.path(where_mega2rtutorial_data(), "vcfr", "vcf.01")
 Mega2VCF(vcffile, ENV$markers[ENV$markers$chromosome==1 ,])
 
-## ---- lsvcf-------------------------------------------------------------------
+## ----lsvcf--------------------------------------------------------------------
 # Before issuing the next command, make sure you have issued
 # this command `dump_mega2rtutorial_data()` first
 # as instructed in the "Tutorial Data' section above.
@@ -417,7 +417,7 @@ showfile.gds(closeall=T, verbose=F)
 gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
 gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=TRUE)
 
-## ---- mega2gdspr1-------------------------------------------------------------
+## ----mega2gdspr1--------------------------------------------------------------
 print(gdsn)
 closefn.gds(gdsn)
 
@@ -433,7 +433,7 @@ showfile.gds(closeall=T, verbose=F)
 gdsfile = file.path(where_mega2rtutorial_data(), "foo.gds")
 gdsn = Mega2gdsfmt(gdsfile, ENV$markers[ENV$markers$chromosome==1 ,], SeqArray=FALSE)
 
-## ---- mega2gdspr2-------------------------------------------------------------
+## ----mega2gdspr2--------------------------------------------------------------
 print(gdsn)
 closefn.gds(gdsn)
 
@@ -452,7 +452,7 @@ closefn.gds(gdsn)
 #  if (GotGenABEL) export.plink(srdta, transpose = FALSE, filebasename = srdtafile,
 #               phenotypes = names(srdta@phdata)[-(1:2)])
 
-## ---- srdta.db,eval=FALSE-----------------------------------------------------
+## ----srdta.db,eval=FALSE------------------------------------------------------
 #  GotGenABEL = require("GenABEL", quietly=FALSE)
 #  # Before issuing the next command, make sure you have issued
 #  # this command `dump_mega2rtutorial_data()` first
@@ -472,6 +472,6 @@ closefn.gds(gdsn)
 #  options(max.print = 30)
 #  Mega2GenABELtst(mega_ = mega, gwaa_ = srdta)
 
-## ---- fin,eval=TRUE,echo=FALSE------------------------------------------------
+## ----fin,eval=TRUE,echo=FALSE-------------------------------------------------
 clean_mega2rtutorial_data()
 

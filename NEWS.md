@@ -1,3 +1,9 @@
+# Version 1.1.0 (2023-12-21)
+
+-- Replaced \docType{package} with _PACKAGE as required by CRAN.
+-- Corrected error-prone uses of `class() == 'numeric'` with `inherits()`.
+-- Removed broken link from vignette.
+
 # Version 1.0.9 (2021-12-04)
 
 -- Adjusted vignette to use TxDb.Hsapiens.UCSC.hg19.knownGene and org.Hs.eg.db conditionally.

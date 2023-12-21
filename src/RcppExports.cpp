@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // getgenotypes_1
 Rcpp::Matrix<STRSXP> getgenotypes_1(NumericVector locus_arg, NumericVector hocus_arg, List genotype_arg, List allele_arg, CharacterVector miscC_arg, NumericVector miscN_arg);
 RcppExport SEXP _Mega2R_getgenotypes_1(SEXP locus_argSEXP, SEXP hocus_argSEXP, SEXP genotype_argSEXP, SEXP allele_argSEXP, SEXP miscC_argSEXP, SEXP miscN_argSEXP) {

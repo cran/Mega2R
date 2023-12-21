@@ -22,7 +22,7 @@ getgenotypesdos(markers_arg, envir = ENV)
 \value{
 a list of 3 values, named "ncol", "zero", "geno".
  \describe{
- \item{geno}{is a matrix of dosages as integers.  The value 0 is given to the Major allele 
+ \item{geno}{is a matrix of dosages as integers.  The value 0 is given to the Major allele
  value, 1 is given to the heterozygote value, and 2 is given to the Minor allele.
  In the matrix, there is usually one column for each  marker in the \emph{markers_arg} argument.
  But if there would be only the one allele 0 or 2 in the column, the column is ignorednot present.
